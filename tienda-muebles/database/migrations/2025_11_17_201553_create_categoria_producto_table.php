@@ -12,7 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('categoria_producto', function (Blueprint $table) {
-            $table->id();
+            // Relacion con categorias
+            $table->foreignId('categoria_id')
+                ->constrained('categorias')
+                ->onDelete('cascade'); // Si se borra la categoría, se borra la relación
+
+            // Relación con productos
+            $table->foreignId('producto_id')
+                ->constrained('productos')
+                ->onDelete('cascade'); // Si se borra el producto, se borra la relación
+
+            // Primary key compuesta
+            $table->primary(['categoria_id', 'producto_id']);
+
+            // Índice inverso para búsquedas desde productos
+            $table->index('producto_id');
+
             $table->timestamps();
         });
     }

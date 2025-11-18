@@ -13,7 +13,22 @@ return new class extends Migration
     {
         Schema::create('carritos', function (Blueprint $table) {
             $table->id();
+
+            // Relación con usuarios (puede ser NULL para invitados)
+            $table->foreignId('usuario_id')
+                ->nullable()
+                ->constrained('usuarios')
+                ->onDelete('cascade'); // Si se borra el usuario se borran sus carritos
+
+            // SesionId único por pestaña/navegador
+            $table->string('sesion_id', 100)->unique();
+
             $table->timestamps();
+
+            // Índices para búsquedas rápidas
+            $table->index('usuario_id');
+            $table->index('sesion_id');
+            $table->index(['usuario_id', 'sesion_id']); // Búsqueda combinada
         });
     }
 

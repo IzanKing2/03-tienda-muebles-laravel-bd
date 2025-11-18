@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('galerias', function (Blueprint $table) {
             $table->id();
+
+            // Relación con productos (1:1)
+            $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade'); // Si se borra el producto, se borra su galería
+
             $table->timestamps();
+
+            // Un producto solo tiene UNA galería
+            $table->unique('producto_id');
         });
     }
 
