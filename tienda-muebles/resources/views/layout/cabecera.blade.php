@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layout</title>
+    <title>Tienda Muebles</title>
 </head>
 
 <body>
-    <header>
+    <header>    
         <nav>
             <ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="{{ route('home') }}">Productos</a></li>
+                <li><a href="{{ route('register') }}">Registrar</a></li>
                 @auth
                     <li>
                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
