@@ -18,7 +18,7 @@
     @if (empty($carrito))
     <div>
         <p>El carro está vacío</p>
-        <a href="{{ route ('productos.index') }}">
+        <a href="{{ route ('') }}">
             <i></i>Ir a la Tienda
         </a>
     </div>
@@ -57,8 +57,8 @@
 
         <div>
             <p>Subtotal: <span>{{ number_format($total, 2) }} €</span></p>
-            <p>Impuestos: <span>{{ number_format($total*0.17, 2) }} €</span></p>
-            <p>Total: <span>{{ number_format($total + ($total*0.17), 2) }} €</span></p>
+            <p>Impuestos: <span>{{ number_format($total*0.10, 2) }} €</span></p>
+            <p>Total: <span>{{ number_format($total + ($total*0.10), 2) }} €</span></p>
         </div>
 
         <div>

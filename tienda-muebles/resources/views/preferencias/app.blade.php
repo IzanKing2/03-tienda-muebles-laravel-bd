@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Tienda Muebles')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -18,8 +15,10 @@
             </a>
             <nav>
                 <ul>
+                    <li><a>Iniciar Sesión</a></li>
+                    <li><a>Registrarse</a></li>
                     <li><a>Productos</a></li>
-                    <li><a>Carrito</a></li>
+                    <li><a href="{{ route('carrito.index') }}">Carrito</a></li>
                     <li><a>Preferencias</a></li>
                 </ul>
             </nav>
