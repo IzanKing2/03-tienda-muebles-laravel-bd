@@ -62,7 +62,9 @@
         </div>
 
         <div>
-            <button type="button" href="#">Finalizar compra</button>
+            <a href="#">
+                <button type="button">Finalizar compra</button>
+            </a>
         </div>
     @endif
 </div>
