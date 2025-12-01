@@ -15,7 +15,6 @@
         </div>
     @endif
 
-
     @if (empty($carrito))
     <div>
         <p>El carro está vacío</p>
@@ -36,21 +35,20 @@
                 </tr>
             </thead>
 
-
             <tbody>
                 @foreach($carrito as $item)
                     <tr>
                         <td>{{ $item ['nombre'] }}</td>
                         <td> 
-                        @if $item['imagen'] *mejorar
-                            <img>
+                        @if $item['imagen']
+                            <img src="{{ asset('storage/' . $item['imagen']) }}">
                         @else
                             <span>No hay imagenes</span>
                         @endif
                         </td>
                         <td>{{ $item ['cantidad'] }}</td>
                         <td>{{ number_format($item['precio'], 2) }}€</td>
-                        <td>{{ number_format($item['precio'] * $item['cantidad'], 2)}}€<</td>
+                        <td>{{ number_format($item['precio'] * $item['cantidad'], 2)}}€</td>
                         <td><a></a></td>
                     </tr>
                     @endforeach
@@ -59,11 +57,12 @@
 
         <div>
             <p>Subtotal: <span>{{ number_format($total, 2) }} €</span></p>
-            <p>Impuestos: </p>
-            <p>Total: </p>
+            <p>Impuestos: <span>{{ number_format($total*0.17, 2) }} €</span></p>
+            <p>Total: <span>{{ number_format($total + ($total*0.17), 2) }} €</span></p>
         </div>
+
         <div>
-            <a href="#">Finalizar compra</a>
+            <button type="button" href="#">Finalizar compra</button>
         </div>
     @endif
 </div>
