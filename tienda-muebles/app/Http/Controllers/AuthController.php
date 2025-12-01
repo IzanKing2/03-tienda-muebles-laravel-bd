@@ -6,6 +6,7 @@ use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Rol;
 
 class AuthController extends Controller
 {
@@ -52,15 +53,21 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nombre' => 'required|string|max:100',
+            'apellidos' => 'required|string|max:150',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:4|confirmed',
         ]);
 
+        // Obtener el rol de cliente
+        $rolCliente = Rol::where('nombre', 'Cliente')->first();
+
         $user = User::create([
-            'name' => $request->name,
+            'nombre' => $request->nombre,
+            'apellidos' => $request->apellidos,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'rol_id' => $rolCliente->id,
         ]);
 
         Auth::login($user);
