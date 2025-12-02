@@ -1,144 +1,138 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de productos</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-        }
+@extends('layout.cabecera')
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+    }
 
-        body {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: #976f47;
-            color: #000;
-        }
+    body {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #976f47;
+        color: #000;
+    }
 
-        div {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-        }
+    div {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
 
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #333;
-        }
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
 
-        .alert {
-            padding: 12px 18px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
-        }
+    .alert {
+        padding: 12px 18px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
 
-        div > a {
-            display: inline-block;
-            padding: 10px 16px;
-            background: #7c542d;
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            margin-bottom: 20px;
-            font-weight: bold;
-            transition: 0.3s ease;
-        }
-        div > a:hover {
-            background: #7e4c1a;
-        }
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border-left: 4px solid #28a745;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 0.95rem;
-        }
+    div>a {
+        display: inline-block;
+        padding: 10px 16px;
+        background: #7c542d;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        margin-bottom: 20px;
+        font-weight: bold;
+        transition: 0.3s ease;
+    }
 
-        thead {
-            background: #4b3828;
-            color: white;
-        }
+    div>a:hover {
+        background: #7e4c1a;
+    }
 
-        thead th {
-            padding: 12px;
-            text-align: left;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 0.95rem;
+    }
 
-        tbody tr {
-            border-bottom: 1px solid #ddd;
-        }
+    thead {
+        background: #4b3828;
+        color: white;
+    }
 
-        tbody tr:hover {
-            background: #f1f1f1;
-        }
+    thead th {
+        padding: 12px;
+        text-align: left;
+    }
 
-        td {
-            padding: 12px;
-        }
+    tbody tr {
+        border-bottom: 1px solid #ddd;
+    }
 
-        td img {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
+    tbody tr:hover {
+        background: #f1f1f1;
+    }
 
-        td a {
-            display: inline-block;
-            padding: 6px 10px;
-            background: #07deff;
-            color: #000;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-right: 8px;
-            font-size: 0.9rem;
-        }
+    td {
+        padding: 12px;
+    }
 
-        td a:hover {
-            background: #06c4e1;
-        }
+    td img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
 
-        td form button {
-            padding: 6px 10px;
-            background: #d82336;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: 0.2s ease;
-        }
+    td a {
+        display: inline-block;
+        padding: 6px 10px;
+        background: #07deff;
+        color: #000;
+        border-radius: 4px;
+        text-decoration: none;
+        margin-right: 8px;
+        font-size: 0.9rem;
+    }
 
-        td form button:hover {
-            background: #af1f2e;
-        }
+    td a:hover {
+        background: #06c4e1;
+    }
 
-        td form {
-            display: inline;
-        }
-    </style>
-</head>
-<body>
-    @extends('layouts.app')
+    td form button {
+        padding: 6px 10px;
+        background: #d82336;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: 0.2s ease;
+    }
 
-    @section('content')
+    td form button:hover {
+        background: #af1f2e;
+    }
+
+    td form {
+        display: inline;
+    }
+</style>
+
+@section('content')
     <div>
         <h2>Listado de Productos</h2>
 
@@ -146,7 +140,7 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <a href="{{ route('productos.create') }}">Nuevo Producto</a>
+        <a href="{{ route('products.create') }}">Nuevo Producto</a>
 
         <table>
             <thead>
@@ -174,8 +168,8 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('productos.edit', $p) }}">Editar</a>
-                            <form action="{{ route('productos.destroy', $p) }}" method="POST">
+                            <a href="{{ route('products.edit', $p) }}">Editar</a>
+                            <form action="{{ route('products.destroy', $p) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button onclick="return confirm('¿Eliminar producto?')">Eliminar</button>
@@ -187,5 +181,3 @@
         </table>
     </div>
 @endsection
-</body>
-</html>

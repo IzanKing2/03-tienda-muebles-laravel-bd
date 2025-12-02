@@ -13,7 +13,7 @@
         <nav>
             <ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('productos') }}">Productos</a></li>
+                <li><a href="{{ route('products') }}">Productos</a></li>
                 <li><a href="{{ route('register') }}">Registrar</a></li>
                 <li><a href="{{ route('preferences') }}">Preferencias</a></li>
                 <li><a href="{{ route('carrito') }}">Carrito</a></li>
@@ -25,8 +25,8 @@
                         </form>
                     </li>
                 @else
-                    <li><a href="{{ route('login') }}">Login</a></li>
-                @endauth
+                        <li><a href="{{ route('login') }}">Login</a></li>
+                    @endauth
             </ul>
         </nav>
     </header>
