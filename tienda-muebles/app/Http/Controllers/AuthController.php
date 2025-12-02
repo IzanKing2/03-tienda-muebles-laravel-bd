@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rol;
 use App\Models\User;
-use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Str;
 
 class AuthController extends Controller
 {
@@ -52,18 +54,29 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nombre' => 'required|string|max:100',
+            'apellidos' => 'required|string|max:150',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:4|confirmed',
+        ], [
+            'email.unique' => 'El email ya está en uso',
+            'password.confirmed' => 'Las contraseñas no coinciden',
+            'password.min' => 'La contraseña debe tener al menos 4 caracteres',
         ]);
 
+        $rolCliente = Rol::where('nombre', 'Cliente')->first();
+
         $user = User::create([
-            'name' => $request->name,
+            'rol_id' => $rolCliente->id,
+            'nombre' => $request->nombre,
+            'apellidos' => $request->apellidos,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
+        // Inicia sesión automáticamente
         Auth::login($user);
-        return redirect()->route('home')->with('success', 'Usuario registrado correctamente');
+
+        return redirect()->route('home')->with('success', '¡Registro exitoso! Bienvenido');
     }
 }

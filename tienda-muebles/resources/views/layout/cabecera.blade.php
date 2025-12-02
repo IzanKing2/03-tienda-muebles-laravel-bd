@@ -8,15 +8,15 @@
 </head>
 
 <body>
-    <header> 
-        <h2>Tienda de Muebles</h2>   
+    <header>
+        <h2>Tienda de Muebles</h2>
         <nav>
             <ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="{{ route('products') }}">Productos</a></li>
                 <li><a href="{{ route('register') }}">Registrar</a></li>
-                <li><a href="{{ route('preferencias') }}">Preferencias</a></li>
-                <li><a href="{{ route('carrito') }}">Carrito</a></li>
+                <li><a href="{{ route('preferences.index') }}">Preferencias</a></li>
+                <li><a href="{{ route('carrito.index') }}">Carrito</a></li>
                 @auth
                     <li>
                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
@@ -27,6 +27,7 @@
                             </button>
                         </form>
                     </li>
+                    
                 @else
                     <li><a href="{{ route('login') }}">Login</a></li>
                 @endauth

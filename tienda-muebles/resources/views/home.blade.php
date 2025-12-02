@@ -1,5 +1,8 @@
-@extends('layout.cabecera');
+@extends('layout.cabecera')
 
 @section('content')
-    <h1>Home</h1>
+    <h1>Tienda de Muebles</h1>
+
+    
 @endsection
+
