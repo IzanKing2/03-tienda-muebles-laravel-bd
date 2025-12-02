@@ -68,18 +68,14 @@ class AuthController extends Controller
 
         $user = User::create([
             'rol_id' => $rolCliente->id,
-            'name' => $request->name,
+            'nombre' => $request->nombre,
             'apellidos' => $request->apellidos,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         // Inicia sesión automáticamente
-        session([
-            'usuario_id' => $user->id,
-            'email' => $user->email,
-            'sesion_id' => Str::random(40),
-        ]);
+        Auth::login($user);
 
         return redirect()->route('home')->with('success', '¡Registro exitoso! Bienvenido');
     }
