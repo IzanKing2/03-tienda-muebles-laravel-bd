@@ -68,6 +68,7 @@
         button:hover {
             background-color: #7e4c1a;
         }
+
         div {
             background: rgba(255, 0, 0, 0.2);
             border-left: 4px solid #ff4d4d;
