@@ -13,21 +13,17 @@
         <nav>
             <ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('products') }}">Productos</a></li>
+                <li><a href="{{ route('productos') }}">Productos</a></li>
                 <li><a href="{{ route('register') }}">Registrar</a></li>
                 <li><a href="{{ route('preferences.index') }}">Preferencias</a></li>
                 <li><a href="{{ route('carrito.index') }}">Carrito</a></li>
                 @auth
                     <li>
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                        <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button type="submit"
-                                style="background: none; border: none; padding: 0; color: inherit; text-decoration: underline; cursor: pointer;">
-                                Logout
-                            </button>
+                            <button type="submit">Cerrar sesión</button>
                         </form>
                     </li>
-                    
                 @else
                     <li><a href="{{ route('login') }}">Login</a></li>
                 @endauth
