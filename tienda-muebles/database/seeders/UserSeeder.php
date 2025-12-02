@@ -13,31 +13,16 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Admin
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@tienda.com'],
-            ['name' => 'Administrador', 'password' => Hash::make('admin123')]
-        );
-        $admin->assignRole('Admin');
+        // Creamos 1 usuario administrador
+        User::factory()->admin()->count(1)->create();
+        $this->command->info('✅ Usuario administrador creado');
 
-        // 2 Gestores
-        for ($i = 1; $i <= 2; $i++) {
-            $email = "gestor{$i}@tienda.com";
-            $user = User::firstOrCreate(
-                ['email' => $email],
-                ['name' => "Gestor {$i}", 'password' => Hash::make('gestor123')]
-            );
-            $user->assignRole('Gestor');
-        }
+        // Creamos 2 usuarios gestores
+        User::factory()->gestor()->count(2)->create();
+        $this->command->info('✅ Usuarios gestores creados');
 
-        // 8 Clientes (Siendo un total de 11)
-        for ($i = 1; $i <= 8; $i++) {
-            $email = "cliente{$i}@tienda.com";
-            $user = User::firstOrCreate(
-                ['email' => $email],
-                ['name' => "Cliente {$i}", 'password' => Hash::make('cliente123')]
-            );
-            $user->assignRole('Cliente');
-        }
+        // Creamos 10 usuarios clientes
+        User::factory()->cliente()->count(10)->create();
+        $this->command->info('✅ Usuarios clientes creados');
     }
 }

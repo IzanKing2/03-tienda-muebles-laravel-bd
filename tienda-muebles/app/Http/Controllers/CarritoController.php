@@ -10,4 +10,13 @@ class CarritoController extends Controller
     {
         return view('carrito.index');
     }
+
+    public function GuardarCookiePreferencia(Request $request)
+    {
+        $paginacion = $request->input('paginacion');
+        $tema = $request->input('tema');
+        $moneda = $request->input('moneda');
+
+
+    }
 }

@@ -3,94 +3,85 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Imagen;
+use App\Models\Producto;
 
 class ImagenProductoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
-        $imagenes = \App\Models\Imagen::all();
+        $imagenes = Imagen::with('producto')->orderBy('id', 'desc')->paginate(10);
         return view('imagen_productos.index', compact('imagenes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
-        $productos = \App\Models\Producto::all();
+        $productos = Producto::orderBy('nombre')->pluck('nombre', 'id');
         return view('imagen_productos.create', compact('productos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
         $request->validate([
             'producto_id' => 'required|exists:productos,id',
-            'url_imagen' => 'required|url',
+            'url_imagen'  => 'required_without:archivo|nullable|url',
+            'archivo'     => 'required_without:url_imagen|nullable|image|max:2048',
         ]);
-        $imagen = new \App\Models\Imagen();
+
+        $imagen = new Imagen();
         $imagen->producto_id = $request->producto_id;
-        $imagen->url_imagen = $request->url_imagen;
+
+        if ($request->hasFile('archivo')) {
+            $path = $request->file('archivo')->store('productos', 'public');
+            $imagen->url_imagen = Storage::url($path);
+        } else {
+            $imagen->url_imagen = $request->url_imagen;
+        }
+
         $imagen->save();
+
         return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto creada correctamente');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Imagen $imagen)
     {
-        //
-        $imagen = \App\Models\Imagen::findOrFail($id);
         return view('imagen_productos.show', compact('imagen'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Imagen $imagen)
     {
-        //
-        $imagen = \App\Models\Imagen::findOrFail($id);
-        $productos = \App\Models\Producto::all();
+        $productos = Producto::orderBy('nombre')->pluck('nombre', 'id');
         return view('imagen_productos.edit', compact('imagen', 'productos'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Imagen $imagen)
     {
-        //
         $request->validate([
             'producto_id' => 'required|exists:productos,id',
-            'url_imagen' => 'required|url',
+            'url_imagen'  => 'required_without:archivo|nullable|url',
+            'archivo'     => 'required_without:url_imagen|nullable|image|max:2048',
         ]);
-        $imagen = \App\Models\Imagen::findOrFail($id);
-        $imagen->producto_id = $request->producto_id;
-        $imagen->url_imagen = $request->url_imagen;
-        $imagen->save();
-        return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto actualizada correctamente');
 
+        $imagen->producto_id = $request->producto_id;
+
+        if ($request->hasFile('archivo')) {
+            // opcional: eliminar archivo anterior si se guardó localmente
+            $path = $request->file('archivo')->store('productos', 'public');
+            $imagen->url_imagen = Storage::url($path);
+        } else {
+            $imagen->url_imagen = $request->url_imagen;
+        }
+
+        $imagen->save();
+
+        return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto actualizada correctamente');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Imagen $imagen)
     {
-        //
-        $imagen = \App\Models\Imagen::findOrFail($id);
+        // opcional: borrar archivo físico si procede
         $imagen->delete();
         return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto eliminada correctamente');
-
     }
 }

@@ -28,6 +28,9 @@ class AuthController extends Controller
         if (Auth::attempt($credenciales)) {
             $request->session()->regenerate();
 
+            // Migrar preferencias de cookies a base de datos si existen
+            $this->migrarPreferenciasDeCookies($request);
+
             return redirect()->route('home')->with('success', 'Bienvenido, ' . Auth::user()->nombre);
         }
 
@@ -44,6 +47,65 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login')->with('success', 'Hasta luego');
+    }
+
+    /**
+     * Migra las preferencias de las cookies a la base de datos del usuario autenticado
+     */
+    private function migrarPreferenciasDeCookies(Request $request)
+    {
+        $user = Auth::user();
+        $updated = false;
+
+        // Verificar y migrar cada preferencia si existe en cookies
+        if ($request->hasCookie('tema')) {
+            $user->tema = $request->cookie('tema');
+            $updated = true;
+        }
+
+        if ($request->hasCookie('moneda')) {
+            $user->moneda = $request->cookie('moneda');
+            $updated = true;
+        }
+
+        if ($request->hasCookie('paginacion')) {
+            $user->paginacion = $request->cookie('paginacion');
+            $updated = true;
+        }
+
+        // Guardar cambios si hubo actualizaciones
+        if ($updated) {
+            $user->save();
+        }
+    }
+
+    /**
+     * Aplica las preferencias de las cookies al usuario recién creado
+     */
+    private function aplicarPreferenciasDeCookies(Request $request, User $user)
+    {
+        $updated = false;
+
+        // Verificar y aplicar cada preferencia si existe en cookies
+        if ($request->hasCookie('tema')) {
+            $user->tema = $request->cookie('tema');
+            $updated = true;
+        }
+
+        if ($request->hasCookie('moneda')) {
+            $user->moneda = $request->cookie('moneda');
+            $updated = true;
+        }
+
+        if ($request->hasCookie('paginacion')) {
+            $user->paginacion = $request->cookie('paginacion');
+            $updated = true;
+        }
+
+        // Guardar cambios si hubo actualizaciones
+        if ($updated) {
+            $user->save();
+        }
     }
 
     public function showRegister()
@@ -73,6 +135,9 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Aplicar preferencias de cookies si existen
+        $this->aplicarPreferenciasDeCookies($request, $user);
 
         // Inicia sesión automáticamente
         Auth::login($user);

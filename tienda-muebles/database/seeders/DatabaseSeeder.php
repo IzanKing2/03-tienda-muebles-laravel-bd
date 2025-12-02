@@ -15,7 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // ========= ROLES =========
         $this->call(RoleSeeder::class);
+
+        // ========= USUARIOS =========
+        $this->call(UserSeeder::class);
+
+        // ========= PRODUCTOS =========
+        $this->call(ProductoSeeder::class);
+
+        // ========= CATEGORIAS =========
+        $this->call(CategoriaSeeder::class);
+
+
 
         // User::factory(10)->create();
 

@@ -140,7 +140,7 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <a href="{{ route('productos.create') }}">Nuevo Producto</a>
+        <a href="{{ route('products.create') }}">Nuevo Producto</a>
 
         <table>
             <thead>
@@ -168,8 +168,8 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('productos.edit', $p) }}">Editar</a>
-                            <form action="{{ route('productos.destroy', $p) }}" method="POST">
+                            <a href="{{ route('products.edit', $p) }}">Editar</a>
+                            <form action="{{ route('products.destroy', $p) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button onclick="return confirm('¿Eliminar producto?')">Eliminar</button>
