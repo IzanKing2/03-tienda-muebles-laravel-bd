@@ -15,6 +15,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+        // Ejecuta los seeders dependientes primero
+        $this->call([
+            RoleSeeder::class,
+            UserSeeder::class,
+            CategoriaSeeder::class,
+            ProductoSeeder::class,
+            GaleriaSeeder::class,
+            CarritoSeeder::class
+        ]);
+
+
+        //Actualmente hay problemas con el RoleSeeder
+        
         // User::factory(10)->create();
 
         User::factory()->create([
