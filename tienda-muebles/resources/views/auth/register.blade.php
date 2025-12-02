@@ -68,6 +68,7 @@
         button:hover {
             background-color: #7e4c1a;
         }
+
         div {
             background: rgba(255, 0, 0, 0.2);
             border-left: 4px solid #ff4d4d;
@@ -113,10 +114,6 @@
         <input type="password" name="password_confirmation" id="password_confirmation" required>
         <br>
         <button type="submit">Register</button>
-    </form>
-    <form action="{{ route('login') }}" method="GET">
-        @csrf
-        <button type="submit">Login</button>
     </form>
 </body>
 
