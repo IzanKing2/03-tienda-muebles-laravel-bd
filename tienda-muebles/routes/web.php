@@ -20,10 +20,10 @@ Route::post('/register', [AuthController::class, 'register']);
 
 // Rutas de productos
 Route::resource('products', ProductController::class);
-Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::get('/products', [ProductController::class, 'index'])->name('productos.index');
 
 // Rutas de categorías
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
 // Rutas de preferencias
 Route::get('/preferences', [PreferenceController::class, 'index'])->name('preferences');

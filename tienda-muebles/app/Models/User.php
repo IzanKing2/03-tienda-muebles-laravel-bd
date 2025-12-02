@@ -47,4 +47,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    /**
+     * Relación: un usuario tiene un rol
+     */
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'rol_id');
+    }
+
+    /**
+     * Relación: un usuario tiene muchos carritos
+     */
+    public function carritos()
+    {
+        return $this->hasMany(Carrito::class, 'usuario_id');
+    }
 }
