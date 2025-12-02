@@ -8,14 +8,14 @@
 </head>
 
 <body>
-    <header> 
-        <h2>Tienda de Muebles</h2>   
+    <header>
+        <h2>Tienda de Muebles</h2>
         <nav>
             <ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="{{ route('products') }}">Productos</a></li>
                 <li><a href="{{ route('register') }}">Registrar</a></li>
-                <li><a href="{{ route('preferencias') }}">Preferencias</a></li>
+                <li><a href="{{ route('preferences') }}">Preferencias</a></li>
                 <li><a href="{{ route('carrito') }}">Carrito</a></li>
                 @auth
                     <li>

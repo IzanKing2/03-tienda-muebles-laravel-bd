@@ -1,4 +1,4 @@
-@extends('layout.cabecera');
+@extends('layout.cabecera')
 
 @section('content')
     <h1>Home</h1>
