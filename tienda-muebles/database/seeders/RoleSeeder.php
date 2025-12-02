@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Rol;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
 class RoleSeeder extends Seeder
 {
@@ -12,14 +12,9 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::firstOrCreate(['name' => 'Admin']);
-        Role::firstOrCreate(['name' => 'Gestor']);
-        Role::firstOrCreate(['name' => 'Cliente']);
+        Rol::firstOrCreate(['nombre' => 'Admin']);
+        Rol::firstOrCreate(['nombre' => 'Gestor']);
+        Rol::firstOrCreate(['nombre' => 'Cliente']);
     }
 }
-
-
-//Hay problemas con las migraciones. Al hacer rolers fijos de admins , gestor y cliente, no se crea
-// correcctamente y hay que arreglarlo. No lo pide el enunciado, pero si me organizo por el plan hecho
-// por Izan , debería de añadirlo.
 

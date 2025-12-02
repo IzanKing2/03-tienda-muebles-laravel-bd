@@ -15,8 +15,8 @@
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="{{ route('productos') }}">Productos</a></li>
                 <li><a href="{{ route('register') }}">Registrar</a></li>
-                <li><a href="{{ route('preferences.index') }}">Preferencias</a></li>
-                <li><a href="{{ route('carrito.index') }}">Carrito</a></li>
+                <li><a href="{{ route('preferences') }}">Preferencias</a></li>
+                <li><a href="{{ route('carrito') }}">Carrito</a></li>
                 @auth
                     <li>
                         <form action="{{ route('logout') }}" method="POST">
@@ -24,6 +24,10 @@
                             <button type="submit">Cerrar sesión</button>
                         </form>
                     </li>
+<<<<<<< HEAD
+=======
+
+>>>>>>> e52d3e46fe1efc1c7d6dcc44000c7274bcb63b02
                 @else
                     <li><a href="{{ route('login') }}">Login</a></li>
                 @endauth

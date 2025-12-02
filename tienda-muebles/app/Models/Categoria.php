@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Producto;
 
 class Categoria extends Model
 {
+    use HasFactory;
     public function productos()
     {
-    return $this->belongsToMany(Producto::class, 'categoria_producto', 'categoria_id', 'producto_id');
+        return $this->belongsToMany(Producto::class, 'categoria_producto', 'categoria_id', 'producto_id');
     }
 }
