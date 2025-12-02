@@ -19,4 +19,36 @@ class CategoryFeatureTest extends TestCase
         $response->assertStatus(200);
         $response->assertViewHas('categories');
     }
+
+    public function test_can_create_category()
+    {
+        $response = $this->post('/categories', [
+            'nombre' => 'Nueva Categoría'
+        ]);
+
+        $response->assertRedirect('/categories');
+        $this->assertDatabaseHas('categorias', ['nombre' => 'Nueva Categoría']);
+    }
+
+    public function test_can_update_category()
+    {
+        $category = Categoria::factory()->create();
+
+        $response = $this->put('/categories/' . $category->id, [
+            'nombre' => 'Categoría Editada'
+        ]);
+
+        $response->assertRedirect('/categories');
+        $this->assertDatabaseHas('categorias', ['nombre' => 'Categoría Editada']);
+    }
+
+    public function test_can_delete_category()
+    {
+        $category = Categoria::factory()->create();
+
+        $response = $this->delete('/categories/' . $category->id);
+
+        $response->assertRedirect('/categories');
+        $this->assertDatabaseMissing('categorias', ['id' => $category->id]);
+    }
 }

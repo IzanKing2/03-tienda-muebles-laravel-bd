@@ -35,6 +35,10 @@ class ProductController extends Controller
             'nombre' => 'required|string|max:150|unique:productos,nombre',
             'descripcion' => 'required|string',
             'precio' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'materiales' => 'required|string',
+            'dimensiones' => 'required|string|max:100',
+            'color_principal' => 'required|string|max:50',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
 
@@ -42,57 +46,72 @@ class ProductController extends Controller
         $producto->nombre = $request->nombre;
         $producto->descripcion = $request->descripcion;
         $producto->precio = $request->precio;
-        $producto->categoria_id = $request->categoria_id;
+        $producto->stock = $request->stock;
+        $producto->materiales = $request->materiales;
+        $producto->dimensiones = $request->dimensiones;
+        $producto->color_principal = $request->color_principal;
+        $producto->precio = $request->precio;
+        // $producto->categoria_id = $request->categoria_id; // Remove this
         $producto->save();
 
-        return redirect()->route('productos.index')->with('success', 'Producto creado correctamente');
+        // Guardar relación con categoría
+        $producto->categorias()->sync([$request->categoria_id]);
+
+        return redirect('/products')->with('success', 'Producto creado correctamente');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Producto $producto)
+    public function show(Producto $product)
     {
-        $producto->load('categoria'); // opcional: cargar relaciones
-        return view('productos.show', compact('producto'));
+        $product->load('categoria'); // opcional: cargar relaciones
+        return view('productos.show', compact('product'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Producto $producto)
+    public function edit(Producto $product)
     {
         $categorias = Categoria::orderBy('nombre')->pluck('nombre', 'id');
-        return view('productos.edit', compact('producto', 'categorias'));
+        return view('productos.edit', compact('product', 'categorias'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, Producto $product)
     {
         $request->validate([
-            'nombre' => 'required|string|max:150|unique:productos,nombre,' . $producto->id,
+            'nombre' => 'required|string|max:150|unique:productos,nombre,' . $product->id,
             'descripcion' => 'required|string',
             'precio' => 'required|numeric|min:0',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
 
-        $producto->nombre = $request->nombre;
-        $producto->descripcion = $request->descripcion;
-        $producto->precio = $request->precio;
-        $producto->categoria_id = $request->categoria_id;
-        $producto->save();
+        $product->nombre = $request->nombre;
+        $product->descripcion = $request->descripcion;
+        $product->precio = $request->precio;
+        $product->stock = $request->stock;
+        $product->materiales = $request->materiales;
+        $product->dimensiones = $request->dimensiones;
+        $product->color_principal = $request->color_principal;
+        // $product->categoria_id = $request->categoria_id; // Remove this
+        $product->save();
 
-        return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
+        // Actualizar relación con categoría
+        $product->categorias()->sync([$request->categoria_id]);
+
+        return redirect('/products')->with('success', 'Producto actualizado correctamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Producto $producto)
+    public function destroy(Producto $product)
     {
-        $producto->delete();
-        return redirect()->route('products')->with('success', 'Producto eliminado correctamente');
+        $product->delete();
+        return redirect('/products')->with('success', 'Producto eliminado correctamente');
     }
 }
