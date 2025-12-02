@@ -23,7 +23,7 @@
         padding: 20px;
         background: #ffffff;
         border-radius: 12px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 20px #33261ba8;
     }
 
     h2 {
