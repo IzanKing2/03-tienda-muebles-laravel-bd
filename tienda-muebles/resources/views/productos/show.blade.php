@@ -169,7 +169,8 @@
             flex-direction: column;
         }
 
-        .seccion-imagenes, .seccion-info {
+        .seccion-imagenes,
+        .seccion-info {
             max-width: 100%;
         }
 
@@ -180,65 +181,65 @@
 </style>
 
 @section('content')
-<div class="contenedor-producto">
+    <div class="contenedor-producto">
 
-    <nav>
-        <ol>
-            <li><a href="{{ route('productos.index') }}">Muebles</a></li>
-            <li>{{ $productos->nombre }}</li>
-        </ol>
-    </nav>
+        <nav>
+            <ol>
+                <li><a href="{{ route('productos.index') }}">Muebles</a></li>
+                <li>{{ $producto->nombre }}</li>
+            </ol>
+        </nav>
 
-    <div class="contenido-principal">
-        <div class="seccion-imagenes">
-            <div class="imagen-principal">
-                <img src="{{ asset('storage/' . $productos->imagen) }}" alt="{{ $productos->nombre }}">
+        <div class="contenido-principal">
+            <div class="seccion-imagenes">
+                <div class="imagen-principal">
+                    <img src="{{ asset('storage/' . $producto->imagen) }}" alt="{{ $producto->nombre }}">
+                </div>
+
+                @if(isset($producto->galeria) && count($producto->galeria))
+                    <div class="galeria-miniatura">
+                        @foreach($producto->galeria as $img)
+                            <img src="{{ asset('storage/' . $img) }}" width="80" alt="Galería de {{ $producto->nombre }}">
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
-            @if(isset($productos->galeria) && count($productos->galeria))
-                <div class="galeria-miniatura">
-                    @foreach($productos->galeria as $img)
-                        <img src="{{ asset('storage/' . $img) }}"  width="80" alt="Galería de {{ $productos->nombre }}">
-                    @endforeach
-                </div>
-            @endif
+            <div class="seccion-info">
+                <h1>{{ $producto->nombre }}</h1>
+
+                <p class="categoria">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</p>
+                <h3>${{ number_format($producto->precio, 2) }}</h3>
+                <p class="descripcion">{{ $producto->descripcion }}</p>
+
+                @if($producto->stock > 0)
+                    <p class="stock-info">En stock: {{ $producto->stock }}</p>
+                @else
+                    <p class="sin-stock">Sin stock</p>
+                @endif
+
+                @if($producto->stock > 0)
+                    <form action="{{ route('carrito.agregar', $producto->id) }}" method="POST">
+                        @csrf
+                        <button type="submit">Añadir al carrito</button>
+                    </form>
+                @endif
+            </div>
         </div>
 
-        <div class="seccion-info">
-            <h1>{{ $productos->nombre }}</h1>
+        <hr>
 
-            <p class="categoria">{{ $productos->categoria->nombre ?? 'Sin categoría' }}</p>
-            <h3>${{ number_format($productos->precio, 2) }}</h3>
-            <p class="descripcion">{{ $productos->descripcion }}</p>
+        @if(isset($producto->especificaciones))
+            <h3>Especificaciones</h3>
+            <ul class="lista-especificaciones">
+                @foreach($producto->especificaciones as $key => $value)
+                    <li>
+                        <strong>{{ ucfirst($key) }}</strong>
+                        <span>{{ $value }}</span>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
 
-            @if($productos->stock > 0)
-                <p class="stock-info">En stock: {{ $productos->stock }}</p>
-            @else
-                <p class="sin-stock">Sin stock</p>
-            @endif
-
-            @if($productos->stock > 0)
-                <form action="{{ route('carrito.agregar', $productos->id) }}" method="POST">
-                    @csrf
-                    <button type="submit">Añadir al carrito</button>
-                </form>
-            @endif
-        </div>
     </div>
-
-    <hr>
-
-    @if(isset($productos->especificaciones))
-        <h3>Especificaciones</h3>
-        <ul class="lista-especificaciones">
-            @foreach($productos->especificaciones as $key => $value)
-                <li>
-                    <strong>{{ ucfirst($key) }}</strong>
-                    <span>{{ $value }}</span>
-                </li>
-            @endforeach
-        </ul>
-    @endif
-
-</div>
 @endsection

@@ -14,7 +14,9 @@
         padding: 0 20px;
     }
 
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
         color: #4a4a4a;
     }
 
@@ -38,7 +40,7 @@
     .encabezado h1 {
         font-size: 2.5em;
         margin-bottom: 5px;
-        color: #5c4033; 
+        color: #5c4033;
     }
 
     .encabezado p {
@@ -51,7 +53,7 @@
         position: relative;
         width: 100%;
         margin-bottom: 40px;
-        overflow: hidden; 
+        overflow: hidden;
     }
 
     .banner-principal img {
@@ -190,6 +192,7 @@
         .grid-categorias {
             flex-wrap: wrap;
         }
+
         .tarjeta-categoria {
             flex-basis: calc(50% - 10px);
             margin-bottom: 20px;
@@ -200,15 +203,15 @@
         .encabezado h1 {
             font-size: 2em;
         }
-        
+
         .tarjeta-categoria {
             flex-basis: 100%;
         }
-        
+
         .grid-productos {
             grid-template-columns: 1fr;
         }
-        
+
         .banner-overlay a {
             padding: 10px 20px;
             font-size: 1em;
@@ -217,52 +220,53 @@
 </style>
 
 @section('content')
-<div class="contenedor-principal">
-    <header class="encabezado">
-        <h1>Bienvenido a tu tienda de Muebles</h1>
-        <p>Encuentra muebles únicos para tu hogar</p>
-    </header>
+    <div class="contenedor-principal">
+        <header class="encabezado">
+            <h1>Bienvenido a tu tienda de Muebles</h1>
+            <p>Encuentra muebles únicos para tu hogar</p>
+        </header>
 
-    <div class="banner-principal">
-        <img src="https://ima.europamuebles.com/tifonima/pi/salones/54108/composicion-salon-avignon_0_0_6AMO.jpg" alt="Banner">
-        <div class="banner-overlay">
-            <a href="#productos">Ver Productos</a>
-        </div>
-    </div>
-
-    <section class="seccion-categorias">
-        <h2>Categorías</h2>
-        <div class="grid-categorias">
-            <div class="tarjeta-categoria">
-                <h3>Salas</h3>
-                <p>Muebles cómodos y elegantes para tu sala.</p>
-            </div>
-            <div class="tarjeta-categoria">
-                <h3>Dormitorios</h3>
-                <p>Camas, mesitas de noche y más para tu descanso.</p>
-            </div>
-            <div class="tarjeta-categoria">
-                <h3>Comedores</h3>
-                <p>Mesas y sillas perfectas para compartir.</p>
+        <div class="banner-principal">
+            <img src="https://ima.europamuebles.com/tifonima/pi/salones/54108/composicion-salon-avignon_0_0_6AMO.jpg"
+                alt="Banner">
+            <div class="banner-overlay">
+                <a href="#productos">Ver Productos</a>
             </div>
         </div>
-    </section>
 
-    <section id="productos" class="seccion-productos">
-        <h2>Productos Destacados</h2>
-        <div class="grid-productos">
-            @foreach($productos as $producto)
-                <div class="tarjeta-producto">
-                    <img src="{{ $producto->imagen }}" alt="{{ $producto->nombre }}">
-                    <div class="info-producto">
-                        <h3>{{ $producto->nombre }}</h3>
-                        <p>{{ $producto->descripcion }}</p>
-                        <p>$ {{ number_format($producto->precio, 2) }}</p>
-                        <a href="{{ route('producto.show', $producto->id) }}">Ver más</a>
-                    </div>
+        <section class="seccion-categorias">
+            <h2>Categorías</h2>
+            <div class="grid-categorias">
+                <div class="tarjeta-categoria">
+                    <h3>Salas</h3>
+                    <p>Muebles cómodos y elegantes para tu sala.</p>
                 </div>
-            @endforeach
-        </div>
-    </section>
-</div>
+                <div class="tarjeta-categoria">
+                    <h3>Dormitorios</h3>
+                    <p>Camas, mesitas de noche y más para tu descanso.</p>
+                </div>
+                <div class="tarjeta-categoria">
+                    <h3>Comedores</h3>
+                    <p>Mesas y sillas perfectas para compartir.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="productos" class="seccion-productos">
+            <h2>Productos Destacados</h2>
+            <div class="grid-productos">
+                @foreach($products as $producto)
+                    <div class="tarjeta-producto">
+                        <img src="{{ $producto->imagen }}" alt="{{ $producto->nombre }}">
+                        <div class="info-producto">
+                            <h3>{{ $producto->nombre }}</h3>
+                            <p>{{ $producto->descripcion }}</p>
+                            <p>$ {{ number_format($producto->precio, 2) }}</p>
+                            <a href="{{ route('products.show', $producto->id) }}">Ver más</a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+    </div>
 @endsection

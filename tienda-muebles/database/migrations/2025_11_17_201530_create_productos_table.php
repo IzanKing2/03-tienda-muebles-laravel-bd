@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -37,8 +36,11 @@ return new class extends Migration
             $table->index('destacado');
             $table->index('precio');
             $table->index('color_principal');
-            $table->fullText(['nombre', 'descripcion']); // Búsqueda por texto
-            // fullText: permite búsquedas de tipo "LIKE" eficientes en nombre/descripción
+
+
+            if (config('database.default') !== 'sqlite') {
+                $table->fullText(['nombre', 'descripcion']); // Búsqueda por texto
+            }
         });
     }
 
