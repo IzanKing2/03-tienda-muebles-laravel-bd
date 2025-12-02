@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Producto;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Producto>
@@ -39,9 +40,9 @@ class ProductoFactory extends Factory
 
         return [
             'nombre' => "$tipo $estilo de $color",
-            'descripcion' => $this->faker->paragraph(3) . ' ' . 
-                           "Perfecta para cualquier espacio. Diseño {$estilo} que combina funcionalidad y estética. " .
-                           $this->faker->sentence(10),
+            'descripcion' => $this->faker->paragraph(3) . ' ' .
+                "Perfecta para cualquier espacio. Diseño {$estilo} que combina funcionalidad y estética. " .
+                $this->faker->sentence(10),
             'precio' => $this->faker->randomFloat(2, 50, 2000), // Entre 50€ y 2000€
             'stock' => $this->faker->numberBetween(0, 50),
             'materiales' => $material . '. ' . $this->faker->sentence(8),
@@ -120,9 +121,11 @@ class ProductoFactory extends Factory
      */
     public function destacado()
     {
-        return $this->state(fn (array $attributes) => [
-            'destacado' => true,
-        ]);
+        return $this->state(function (array $attributes) {
+            return [
+                'destacado' => true,
+            ];
+        });
     }
 
     /**
