@@ -21,12 +21,15 @@ Route::post('/register', [AuthController::class, 'register']);
 // Rutas de productos
 Route::resource('products', ProductController::class);
 Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 
 // Rutas de categorías
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
 
 // Rutas de preferencias
 Route::get('/preferences', [PreferenceController::class, 'index'])->name('preferences');
+Route::post('/preferences/cookie', [CarritoController::class, 'GuardarCookiePreferencia'])->name('preferences.cookie');
+Route::put('/preferences', [PreferenceController::class, 'update'])->name('preferences.update')->middleware('auth');
 
 // Rutas de carrito
 Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
