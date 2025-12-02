@@ -12,9 +12,18 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Rol::firstOrCreate(['nombre' => 'Admin']);
-        Rol::firstOrCreate(['nombre' => 'Gestor']);
-        Rol::firstOrCreate(['nombre' => 'Cliente']);
+        // Verificar si ya existen roles para no duplicar
+        if (Rol::count() > 0) {
+            $this->command->info('Los roles ya existen, saltando...');
+            return;
+        }
+
+        // Crear los 3 roles fijos
+        Rol::create(['nombre' => 'Administrador']);
+        Rol::create(['nombre' => 'Gestor']);
+        Rol::create(['nombre' => 'Cliente']);
+
+        $this->command->info('✅ Roles creados: Administrador, Gestor, Cliente');
     }
 }
 

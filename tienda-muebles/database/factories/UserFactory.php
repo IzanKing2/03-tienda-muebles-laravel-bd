@@ -64,6 +64,7 @@ class UserFactory extends Factory
                 'nombre' => 'Admin',
                 'apellidos' => 'Sistema',
                 'email' => 'admin@tiendamuebles.com',
+                'password' => '1234',
             ];
         });
     }
