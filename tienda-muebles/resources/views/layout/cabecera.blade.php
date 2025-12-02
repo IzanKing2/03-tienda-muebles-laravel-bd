@@ -25,8 +25,8 @@
                         </form>
                     </li>
                 @else
-                        <li><a href="{{ route('login') }}">Login</a></li>
-                    @endauth
+                    <li><a href="{{ route('login') }}">Login</a></li>
+                @endauth
             </ul>
         </nav>
     </header>
