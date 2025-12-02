@@ -22,6 +22,7 @@ class ProductController extends Controller
      */
     public function create()
     {
+        //
         return view('productos.create');
 
     }
@@ -44,7 +45,7 @@ class ProductController extends Controller
         $producto->precio = $request->precio;
         $producto->categoria_id = $request->categoria_id;
         $producto->save();
-        return redirect()->route('products.index')->with('success', 'Producto creado correctamente');
+        return redirect()->route('productos.index')->with('success', 'Producto creado correctamente');
 
     }
 
@@ -55,7 +56,7 @@ class ProductController extends Controller
     {
         //
         $producto = \App\Models\Producto::findOrFail($id);
-        return view('products.show', compact('producto'));
+        return view('productos.show', compact('producto'));
 
     }
 
@@ -66,7 +67,7 @@ class ProductController extends Controller
     {
         //
         $producto = \App\Models\Producto::findOrFail($id);
-        return view('products.edit', compact('producto'));
+        return view('productos.edit', compact('producto'));
 
     }
 
@@ -88,7 +89,7 @@ class ProductController extends Controller
         $producto->precio = $request->precio;
         $producto->categoria_id = $request->categoria_id;
         $producto->save();
-        return redirect()->route('products.index')->with('success', 'Producto actualizado correctamente');
+        return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
 
     }
 
@@ -100,7 +101,6 @@ class ProductController extends Controller
         //
         $producto = \App\Models\Producto::findOrFail($id);
         $producto->delete();
-        return redirect()->route('products.index')->with('success', 'Producto eliminado correctamente');
-
+        return redirect()->route('productos.index')->with('success', 'Producto eliminado correctamente');
     }
 }
