@@ -199,7 +199,7 @@
         @if (empty($carrito))
             <div>
                 <p>El carro está vacío</p>
-                <a href="{{ route('productos.index') }}">
+                <a href="{{ route('productos.show') }}">
                     <i></i>Ir a la Tienda
                 </a>
             </div>
