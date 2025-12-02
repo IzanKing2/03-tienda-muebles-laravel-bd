@@ -12,6 +12,8 @@ class ImagenProductoController extends Controller
     public function index()
     {
         //
+        $imagenes = \App\Models\Imagen::all();
+        return view('imagen_productos.index', compact('imagenes'));
     }
 
     /**
@@ -20,6 +22,8 @@ class ImagenProductoController extends Controller
     public function create()
     {
         //
+        $productos = \App\Models\Producto::all();
+        return view('imagen_productos.create', compact('productos'));
     }
 
     /**
@@ -28,6 +32,15 @@ class ImagenProductoController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'producto_id' => 'required|exists:productos,id',
+            'url_imagen' => 'required|url',
+        ]);
+        $imagen = new \App\Models\Imagen();
+        $imagen->producto_id = $request->producto_id;
+        $imagen->url_imagen = $request->url_imagen;
+        $imagen->save();
+        return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto creada correctamente');
     }
 
     /**
@@ -36,6 +49,8 @@ class ImagenProductoController extends Controller
     public function show(string $id)
     {
         //
+        $imagen = \App\Models\Imagen::findOrFail($id);
+        return view('imagen_productos.show', compact('imagen'));
     }
 
     /**
@@ -44,6 +59,9 @@ class ImagenProductoController extends Controller
     public function edit(string $id)
     {
         //
+        $imagen = \App\Models\Imagen::findOrFail($id);
+        $productos = \App\Models\Producto::all();
+        return view('imagen_productos.edit', compact('imagen', 'productos'));
     }
 
     /**
@@ -52,6 +70,16 @@ class ImagenProductoController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'producto_id' => 'required|exists:productos,id',
+            'url_imagen' => 'required|url',
+        ]);
+        $imagen = \App\Models\Imagen::findOrFail($id);
+        $imagen->producto_id = $request->producto_id;
+        $imagen->url_imagen = $request->url_imagen;
+        $imagen->save();
+        return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto actualizada correctamente');
+
     }
 
     /**
@@ -60,5 +88,9 @@ class ImagenProductoController extends Controller
     public function destroy(string $id)
     {
         //
+        $imagen = \App\Models\Imagen::findOrFail($id);
+        $imagen->delete();
+        return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto eliminada correctamente');
+
     }
 }
