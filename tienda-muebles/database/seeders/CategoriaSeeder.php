@@ -12,19 +12,8 @@ class CategoriaSeeder extends Seeder
      */
     public function run(): void
     {
-        $categorias = [
-            'Salón',
-            'Dormitorio',
-            'Comedor',
-            'Oficina',
-            'Infantil',
-            'Exterior',
-            'Iluminación',
-            'Almacenamiento',
-        ];
-
-        foreach ($categorias as $nombre) {
-            Categoria::firstOrCreate(['nombre' => $nombre]);
-        }
+        // Generamos 10 categorías
+        Categoria::factory()->count(10)->create();
+        $this->command->info('✅ Categorias creadas');
     }
 }

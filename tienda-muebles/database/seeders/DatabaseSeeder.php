@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
         // ========= PRODUCTOS =========
         $this->call(ProductoSeeder::class);
 
+        // ========= CATEGORIAS =========
+        $this->call(CategoriaSeeder::class);
 
 
 
