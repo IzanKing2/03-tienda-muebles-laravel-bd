@@ -13,7 +13,7 @@ class ProductController extends Controller
     {
         //
         $productos = \App\Models\Producto::all();
-        return view('products.index', compact('productos'));
+        return view('productos.index', compact('productos'));
 
     }
 
@@ -22,8 +22,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
-        return view('products.create');
+        return view('productos.create');
 
     }
 
