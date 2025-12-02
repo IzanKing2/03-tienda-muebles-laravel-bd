@@ -7,56 +7,56 @@ use Illuminate\Support\Facades\Auth;
 
 class PreferenceController extends Controller
 {
-    public function index()
-    {
-        // Obtener preferencias según el estado de autenticación
-        $preferences = $this->getPreferences();
+    public function index() {
+        $preferencias = $this->ObtenerCookie();
 
-        return view('preferences.index', compact('preferences'));
+        return view('preferences.index', compact('preferencias'));
     }
 
-    /**
-     * Actualiza las preferencias del usuario autenticado en la base de datos
-     */
-    public function update(Request $request)
-    {
-        // Solo para usuarios autenticados
+    public function UpdateCookie(Request $request) {
         if (!Auth::check()) {
             return redirect()->route('preferences')->with('error', 'Debes iniciar sesión para guardar preferencias');
         }
 
-        // Validar los datos
-        $validated = $request->validate([
+        $validar = $request->validate([
             'paginacion' => 'required|integer|in:6,12,24,48',
             'tema' => 'required|string|in:light,dark',
             'moneda' => 'required|string|in:€,$,£',
         ]);
 
-        // Actualizar preferencias del usuario
-        $user = Auth::user();
-        $user->tema = $validated['tema'];
-        $user->moneda = $validated['moneda'];
-        $user->paginacion = $validated['paginacion'];
-        $user->save();
+        $usuario = Auth::user();
+        $usuario->tema = $validar['tema'];
+        $usuario->moneda = $validar['moneda'];
+        $usuario->paginacion = $validar['paginacion'];
+        $usuario->save();
 
-        return redirect()->route('preferences')->with('success', 'Preferencias actualizadas correctamente');
+        return redirect()->route('preferences')->with('success', "Preferencias actualizadas");
     }
 
-    /**
-     * Obtiene las preferencias del usuario (desde BD si está autenticado, desde cookies si no)
-     */
-    private function getPreferences()
-    {
+    public function GuardarCookie(Request $solicitud) {
+        $validar = $solicitud->validate([
+            'paginacion' => 'required|integer|in:6,12,24,48',
+            'tema' => 'required|string|in:light,dark',
+            'moneda' => 'required|string|in:€,$,£',
+        ]);
+
+        $duracionCookie = 43200;
+        $cookietema = cookie('tema', $validar['tema'], $duracionCookie);
+        $gcookiemoneda = cookie('moneda', $validar['moneda'], $duracionCookie);
+        $cookiepaginacion = cookie('paginacion', $validar['paginacion'], $duracionCookie);
+
+        return redirect()->route('preferences')->with('success', "Preferencias guardada")->withCookies([$cookietema, $gcookiemoneda, $cookiepaginacion]);
+    }
+
+    private function ObtenerCookie() {
         if (Auth::check()) {
-            // Usuario autenticado: obtener de la base de datos
-            $user = Auth::user();
+            $usuario = Auth::user();
             return (object) [
-                'tema' => $user->tema ?? 'light',
-                'moneda' => $user->moneda ?? '€',
-                'paginacion' => $user->paginacion ?? 12,
+                'tema' => $usuario->tema ?? 'light',
+                'moneda' => $usuario->moneda ?? '€',
+                'paginacion' => $usuario->paginacion ?? 12,
             ];
         } else {
-            // Usuario invitado: obtener de cookies o valores por defecto
             return (object) [
                 'tema' => request()->cookie('tema', 'light'),
                 'moneda' => request()->cookie('moneda', '€'),
