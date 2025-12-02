@@ -88,6 +88,6 @@ class CategoryController extends Controller
         $category = \App\Models\Categoria::findOrFail($id);
         $category->delete();
         return redirect()->route('categories.index')->with('success', 'Categoría eliminada correctamente');
-        
+
     }
 }
