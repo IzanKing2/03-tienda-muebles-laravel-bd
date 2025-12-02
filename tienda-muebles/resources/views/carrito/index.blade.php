@@ -73,7 +73,8 @@
     }
 
     .container > div:first-child:not(:has(button[data-bs-dismiss="alert"])) a {
-        color: #5c4033;
+        background-color: #5c4033;
+        color: #fff;
         padding: 10px 20px;
         text-decoration: none;
         border-radius: 5px;
