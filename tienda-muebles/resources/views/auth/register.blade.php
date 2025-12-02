@@ -30,7 +30,7 @@
             font-size: 2.4rem;
         }
 
-        .register {
+        form {
             background-color: #4b3828;
             padding: 30px 40px;
             border-radius: 12px;
@@ -95,7 +95,7 @@
             </ul>
         </div>
     @endif
-    <form class="register" action="{{ route('register') }}" method="POST">
+    <form action="{{ route('register') }}" method="POST">
         @csrf
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" required>
@@ -113,10 +113,6 @@
         <input type="password" name="password_confirmation" id="password_confirmation" required>
         <br>
         <button type="submit">Register</button>
-    </form>
-    <form action="{{ route('login') }}" method="GET">
-        @csrf
-        <button type="submit">Login</button>
     </form>
 </body>
 
