@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,7 +16,7 @@ return new class extends Migration
             // Relación con usuarios (puede ser NULL para invitados)
             $table->foreignId('usuario_id')
                 ->nullable()
-                ->constrained('usuarios')
+                ->constrained('users')
                 ->onDelete('cascade'); // Si se borra el usuario se borran sus carritos
 
             // SesionId único por pestaña/navegador

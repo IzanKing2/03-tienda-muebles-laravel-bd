@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
 </head>
+
 <body>
     <h1>Register</h1>
     @if ($errors->any())
@@ -18,8 +20,11 @@
     @endif
     <form action="{{ route('register') }}" method="POST">
         @csrf
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name" required>
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre" required>
+        <br>
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" name="apellidos" id="apellidos" required>
         <br>
         <label for="email">Email:</label>
         <input type="email" name="email" id="email" required>
@@ -32,5 +37,10 @@
         <br>
         <button type="submit">Register</button>
     </form>
+    <form action="{{ route('login') }}" method="GET">
+        @csrf
+        <button type="submit">Login</button>
+    </form>
 </body>
+
 </html>

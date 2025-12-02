@@ -54,7 +54,8 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nombre' => 'required|string|max:100',
+            'apellidos' => 'required|string|max:150',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:4|confirmed',
         ], [
@@ -67,18 +68,14 @@ class AuthController extends Controller
 
         $user = User::create([
             'rol_id' => $rolCliente->id,
-            'name' => $request->name,
+            'nombre' => $request->nombre,
             'apellidos' => $request->apellidos,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         // Inicia sesión automáticamente
-        session([
-            'usuario_id' => $user->id,
-            'email' => $user->email,
-            'sesion_id' => Str::random(40),
-        ]);
+        Auth::login($user);
 
         return redirect()->route('home')->with('success', '¡Registro exitoso! Bienvenido');
     }
