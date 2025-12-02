@@ -18,7 +18,7 @@
     @if (empty($carrito))
     <div>
         <p>El carro está vacío</p>
-        <a href="{{ route ('') }}">
+        <a href="{{ route ('carrito.index') }}">
             <i></i>Ir a la Tienda
         </a>
     </div>
