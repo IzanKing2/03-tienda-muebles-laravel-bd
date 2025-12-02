@@ -13,7 +13,7 @@
         <nav>
             <ul>
                 <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('productos') }}">Productos</a></li>
+                <li><a href="{{ route('products') }}">Productos</a></li>
                 <li><a href="{{ route('register') }}">Registrar</a></li>
                 <li><a href="{{ route('preferences') }}">Preferencias</a></li>
                 <li><a href="{{ route('carrito') }}">Carrito</a></li>
@@ -24,13 +24,10 @@
                             <button type="submit">Cerrar sesión</button>
                         </form>
                     </li>
-<<<<<<< HEAD
-=======
-
->>>>>>> e52d3e46fe1efc1c7d6dcc44000c7274bcb63b02
+                    <<<<<<< HEAD=======>>>>>>> e52d3e46fe1efc1c7d6dcc44000c7274bcb63b02
                 @else
-                    <li><a href="{{ route('login') }}">Login</a></li>
-                @endauth
+                        <li><a href="{{ route('login') }}">Login</a></li>
+                    @endauth
             </ul>
         </nav>
     </header>
