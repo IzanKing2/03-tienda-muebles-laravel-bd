@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Tienda Muebles')</title>
+    <style>
+
+    </style>
 </head>
 
 <body>
@@ -18,7 +21,7 @@
                     <li><a>Iniciar Sesión</a></li>
                     <li><a>Registrarse</a></li>
                     <li><a>Productos</a></li>
-                    <li><a href="{{ route('carrito.index') }}">Carrito</a></li>
+                    <li><a href="{{ route('carrito') }}">Carrito</a></li>
                     <li><a>Preferencias</a></li>
                 </ul>
             </nav>
@@ -29,4 +32,5 @@
         <p>&copy;2025 Tienda de Muebles</p>
     </footer>
 </body>
+
 </html>
