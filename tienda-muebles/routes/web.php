@@ -19,8 +19,8 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 
 // Rutas de productos
+Route::resource('products', ProductController::class);
 Route::get('/products', [ProductController::class, 'index'])->name('products');
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
 
 // Rutas de categorías
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
