@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Producto;
+use App\Models\Categoria;
 
 class ProductController extends Controller
 {
@@ -11,10 +13,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
-        $productos = \App\Models\Producto::all();
+        $productos = Producto::with('categoria')->orderBy('nombre')->paginate(10);
         return view('productos.index', compact('productos'));
-
     }
 
     /**
@@ -22,9 +22,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
-        return view('productos.create');
-
+        $categorias = Categoria::orderBy('nombre')->pluck('nombre', 'id');
+        return view('productos.create', compact('categorias'));
     }
 
     /**
@@ -32,74 +31,67 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $request->validate([
-            'nombre' => 'required|string|max:150|unique:productos',
+            'nombre' => 'required|string|max:150|unique:productos,nombre',
             'descripcion' => 'required|string',
             'precio' => 'required|numeric|min:0',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
-        $producto = new \App\Models\Producto();
+
+        $producto = new Producto();
         $producto->nombre = $request->nombre;
         $producto->descripcion = $request->descripcion;
         $producto->precio = $request->precio;
         $producto->categoria_id = $request->categoria_id;
         $producto->save();
-        return redirect()->route('productos.index')->with('success', 'Producto creado correctamente');
 
+        return redirect()->route('productos.index')->with('success', 'Producto creado correctamente');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Producto $producto)
     {
-        //
-        $producto = \App\Models\Producto::findOrFail($id);
+        $producto->load('categoria'); // opcional: cargar relaciones
         return view('productos.show', compact('producto'));
-
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Producto $producto)
     {
-        //
-        $producto = \App\Models\Producto::findOrFail($id);
-        return view('productos.edit', compact('producto'));
-
+        $categorias = Categoria::orderBy('nombre')->pluck('nombre', 'id');
+        return view('productos.edit', compact('producto', 'categorias'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Producto $producto)
     {
-        //
         $request->validate([
-            'nombre' => 'required|string|max:150',
+            'nombre' => 'required|string|max:150|unique:productos,nombre,' . $producto->id,
             'descripcion' => 'required|string',
             'precio' => 'required|numeric|min:0',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
-        $producto = \App\Models\Producto::findOrFail($id);
+
         $producto->nombre = $request->nombre;
         $producto->descripcion = $request->descripcion;
         $producto->precio = $request->precio;
         $producto->categoria_id = $request->categoria_id;
         $producto->save();
-        return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
 
+        return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Producto $producto)
     {
-        //
-        $producto = \App\Models\Producto::findOrFail($id);
         $producto->delete();
         return redirect()->route('productos.index')->with('success', 'Producto eliminado correctamente');
     }
