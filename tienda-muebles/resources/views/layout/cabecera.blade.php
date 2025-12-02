@@ -24,10 +24,6 @@
                             <button type="submit">Cerrar sesión</button>
                         </form>
                     </li>
-<<<<<<< HEAD
-=======
-
->>>>>>> e52d3e46fe1efc1c7d6dcc44000c7274bcb63b02
                 @else
                     <li><a href="{{ route('login') }}">Login</a></li>
                 @endauth
