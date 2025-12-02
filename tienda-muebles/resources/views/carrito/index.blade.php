@@ -73,7 +73,7 @@
     }
 
     .container > div:first-child:not(:has(button[data-bs-dismiss="alert"])) a {
-        color: #fff;
+        color: #5c4033;
         padding: 10px 20px;
         text-decoration: none;
         border-radius: 5px;
@@ -83,7 +83,7 @@
     }
 
     .container > div:first-child:not(:has(button[data-bs-dismiss="alert"])) a:hover {
-        background-color: #0056b3;
+        background-color: #7b5b4e;
     }
 
     .container > div:first-child:not(:has(button[data-bs-dismiss="alert"])) i {
