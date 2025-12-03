@@ -35,8 +35,7 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 
 // Rutas de preferencias
 Route::get('/preferences', [PreferenceController::class, 'index'])->name('preferences');
-Route::post('/preferences/cookie', [CarritoController::class, 'GuardarCookiePreferencia'])->name('preferences.cookie');
-Route::put('/preferences', [PreferenceController::class, 'update'])->name('preferences.update')->middleware('auth');
+Route::put('/preferences', [PreferenceController::class, 'UpdateCookie'])->name('preferences.update');
 
 // Rutas de carrito
 Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
