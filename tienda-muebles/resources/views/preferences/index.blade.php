@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layout.cabecera')
 
 @section('content')
 
@@ -17,12 +17,10 @@
             </div>
         @endif
 
-        <form action="{{ auth()->check() ? route('preferences.update') : route('preferences.cookie') }}" method="POST">
+        <form action="{{ route('preferences.update') }}" method="POST">
             @csrf
-            @if(auth()->check())
-                @method('PUT')
-            @endif
-            
+            @method('PUT')
+
             <label for="tema">Tema:</label>
             <select name="tema" id="tema">
                 <option value="light" {{ $preferencias->tema === 'light' ? 'selected' : '' }}>Claro</option>

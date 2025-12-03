@@ -35,7 +35,7 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 
 // Rutas de preferencias
 Route::get('/preferences', [PreferenceController::class, 'index'])->name('preferences');
-Route::put('/preferences', [PreferenceController::class, 'UpdateCookie'])->name('preferences.update');
+Route::put('/preferences', [PreferenceController::class, 'update'])->name('preferences.update');
 
 // Rutas de carrito
 Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
