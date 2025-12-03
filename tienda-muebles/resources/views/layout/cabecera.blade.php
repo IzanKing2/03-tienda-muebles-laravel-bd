@@ -118,7 +118,7 @@
                 <li><a href="{{ route('productos.index') }}">Productos</a></li>
                 <li><a href="{{ route('register') }}">Registrar</a></li>
                 <li><a href="{{ route('preferences') }}">Preferencias</a></li>
-                <li><a href="{{ route('carrito') }}">Carrito</a></li>
+                <li><a href="{{ route('carrito.index') }}">Carrito</a></li>
                 @auth
                     <li>
                         <form action="{{ route('logout') }}" method="POST">
