@@ -33,5 +33,16 @@ class UserSeeder extends Seeder
         // Creamos 10 usuarios clientes
         User::factory()->cliente()->count(10)->create();
         $this->command->info('✅ Usuarios clientes creados');
+
+        $role_cliente = Rol::where('nombre', 'Cliente')->first()->id;
+        // Creo 1 usuario cliente para pruebas
+        $user = User::create([
+            "nombre" => "Cliente",
+            "apellidos" => "Cliente",
+            "email" => "cliente@cliente.com",
+            "password" => Hash::make("1234"),
+            "rol_id" => $role_cliente,
+        ]);
+        $this->command->info('✅ Usuario cliente creado');
     }
 }

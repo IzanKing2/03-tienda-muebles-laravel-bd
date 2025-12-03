@@ -7,6 +7,7 @@ use App\Models\CarritoItem;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 use Illuminate\Support\Facades\Cookie;
@@ -19,11 +20,12 @@ class CarritoController extends Controller
     public function index()
     {
         // Obtener carrito de sesión (array con productos)
-        $carritoSesion = Session::get('carrito', []);
+        $carrito = Session::get('carrito', []);
+        Log::info('Carrito index:', ['carrito' => $carrito]);
 
         // Calcular subtotal (suma de precio * cantidad)
         $subtotal = 0;
-        foreach ($carritoSesion as $item) {
+        foreach ($carrito as $item) {
             $subtotal += $item['precio'] * $item['cantidad'];
         }
 
@@ -34,7 +36,7 @@ class CarritoController extends Controller
         $total = $subtotal + $impuestos;
 
         // Pasar datos a la vista
-        return view('carrito.index', compact('carritoSesion', 'subtotal', 'impuestos', 'total'));
+        return view('carrito.index', compact('carrito', 'subtotal', 'impuestos', 'total'));
     }
 
     // Añadir un producto al carrito
@@ -70,22 +72,18 @@ class CarritoController extends Controller
         } else {
             // Producto nuevo: añadirlo al carrito
             $carrito[$id] = [
-                'nombre' => $producto->nombre,
-                'precio' => $producto->precio,
-                'cantidad' => 1,
-                'imagen' => $producto->imagen_principal ?? null,
-                'producto_id' => $id,
+                "nombre" => $producto->nombre,
+                "cantidad" => 1,
+                "precio" => $producto->precio,
+                "imagen" => $producto->imagen_principal,
+                "producto_id" => $producto->id
             ];
         }
 
-        // Guardar carrito actualizado en sesión
-        Session::put('carrito', $carrito);
+        session()->put('carrito', $carrito);
+        Log::info('Producto agregado. Carrito:', ['carrito' => session()->get('carrito')]);
 
-        // Redirigir al carrito con mensaje de éxito
-        return redirect()->route('carrito.index')->with(
-            'success',
-            "✅ {$producto->nombre} añadido al carrito."
-        );
+        return redirect()->back()->with('success', 'Producto añadido al carrito');
     }
 
     // Actualizar la cantidad de un producto en el carrito
