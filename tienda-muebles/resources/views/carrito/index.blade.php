@@ -217,7 +217,7 @@
                 </thead>
 
                 <tbody>
-                    @foreach($carrito as $item)
+                    @foreach($carrito as $id => $item)
                         <tr>
                             <td>{{ $item['nombre'] }}</td>
                             <td>
@@ -230,7 +230,24 @@
                             <td>{{ $item['cantidad'] }}</td>
                             <td>{{ number_format($item['precio'], 2) }}€</td>
                             <td>{{ number_format($item['precio'] * $item['cantidad'], 2)}}€</td>
-                            <td><a></a></td>
+                            <td>
+                                <div>
+                                    <form action="{{ route('carrito.update', $id) }}" method="POST">
+                                        @csrf
+                                        <input type="number" name="cantidad" value="{{ $item['cantidad'] }}" min="1">
+                                        <button type="submit" title="Actualizar cantidad">
+                                            <i></i>
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('carrito.remove', $id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="Eliminar producto">
+                                            <i></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
