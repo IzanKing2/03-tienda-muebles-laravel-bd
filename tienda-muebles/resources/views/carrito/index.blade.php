@@ -182,19 +182,15 @@
 </style>
 
 @section('content')
-    <div class="container">
+<div class="container mt-5 mb-5">
+  <h2>Carrito de Compra</h2>
 
-        @if (session('success'))
-            <div>
-                {{ session('success') }}
-                <button type="button" data-bs-dismiss="alert"></button>
-            </div>
-        @elseif(session('error'))
-            <div>
-                {{ session('error') }}
-                <button type="button" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
+  {{-- Mensajes flash --}}
+  @if (session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+  @elseif (session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+  @endif
 
         @if (empty($carrito))
             <div>
@@ -253,17 +249,36 @@
                 </tbody>
             </table>
 
-            <div>
-                <p>Subtotal: <span>{{ number_format($total, 2) }} €</span></p>
-                <p>Impuestos: <span>{{ number_format($total * 0.10, 2) }} €</span></p>
-                <p>Total: <span>{{ number_format($total + ($total * 0.10), 2) }} €</span></p>
-            </div>
-
-            <div>
-                <a href="#">
-                    <button type="button">Finalizar compra</button>
-                </a>
-            </div>
-        @endif
+    {{-- Resumen del pedido --}}
+    <div class="row">
+      <div class="col-md-4 offset-md-8">
+        <div class="card">
+          <div class="card-body">
+            <p>Subtotal: {{ number_format($subtotal, 2) }} €</p>
+            <p>Impuestos (10%): {{ number_format($impuestos, 2) }} €</p>
+            <p><strong>Total: {{ number_format($total, 2) }} €</strong></p>
+            @auth
+              <form action="{{ route('carrito.guardar') }}" method="POST" class="mb-2">
+                @csrf
+                <button type="submit" class="btn btn-success w-100">
+                  <i class="bi bi-check-circle"></i> Confirmar Pedido
+                </button>
+              </form>
+            @else
+              <a href="{{ route('login') }}" class="btn btn-success w-100 mb-2">
+                <i class="bi bi-box-arrow-in-right"></i> Inicia sesión para comprar
+              </a>
+            @endauth
+            <form action="{{ route('carrito.vaciar') }}" method="POST">
+              @csrf @method('DELETE')
+              <button type="submit" class="btn btn-outline-danger w-100" onclick="return confirm('¿Deseas vaciar el carrito?')">
+                <i class="bi bi-trash"></i> Vaciar Carrito
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
+  @endif
+</div>
 @endsection
