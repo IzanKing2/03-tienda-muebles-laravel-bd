@@ -51,7 +51,7 @@
         nav ul {
             list-style: none;
             display: flex;
-            gap: 15px; 
+            gap: 15px;
             flex-wrap: wrap;
         }
 
@@ -88,7 +88,7 @@
             color: white;
             text-align: center;
             padding: 15px 20px;
-            margin-top: auto; 
+            margin-top: auto;
             font-size: 0.9rem;
         }
 

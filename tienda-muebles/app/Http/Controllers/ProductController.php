@@ -22,7 +22,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categorias = Categoria::orderBy('nombre')->pluck('nombre', 'id');
+        $categorias = Categoria::orderBy('nombre')->get();
         return view('productos.create', compact('categorias'));
     }
 
@@ -74,7 +74,7 @@ class ProductController extends Controller
      */
     public function edit(Producto $product)
     {
-        $categorias = Categoria::orderBy('nombre')->pluck('nombre', 'id');
+        $categorias = Categoria::orderBy('nombre')->get();
         return view('productos.edit', compact('product', 'categorias'));
     }
 

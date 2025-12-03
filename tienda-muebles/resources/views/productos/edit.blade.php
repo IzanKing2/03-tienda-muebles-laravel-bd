@@ -1,88 +1,95 @@
 @extends('layout.cabecera')
-<style>
-    * {
-        font-family: Arial, sans-serif;
-    }
 
+<style>
     body {
         background-color: #976f47;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    div {
-        max-width: 600px;
-        margin: 50px auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 2px 2px #33261ba8;
+    .edit-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
         background-color: #f9f9f9;
-        font-family: Arial, sans-serif;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(51, 38, 27, 0.2);
     }
 
-    h2 {
+    .edit-header {
         text-align: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 15px;
+    }
+
+    .edit-header h2 {
         color: #333;
-        margin-bottom: 25px;
-        border-bottom: 2px solid #eee;
-        padding-bottom: 10px;
+        font-size: 2rem;
+        margin: 0;
+        font-weight: 600;
     }
 
-    form {
+    .form-actions {
         display: flex;
-        flex-direction: column;
+        justify-content: flex-end;
         gap: 15px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
     }
 
-    button,
-    form a {
-        padding: 10px 15px;
+    .btn {
+        padding: 12px 24px;
         border: none;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
-        text-align: center;
+        font-size: 1rem;
+        font-weight: 600;
         text-decoration: none;
-        display: inline-block;
-        transition: background-color 0.3s ease;
-        font-weight: bold;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    button[type="submit"] {
+    .btn-primary {
         background-color: #0079cf;
         color: white;
     }
 
-    button[type="submit"]:hover {
+    .btn-primary:hover {
         background-color: #0056b3;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-    form a {
+    .btn-secondary {
         background-color: #7c542d;
         color: white;
     }
 
-    form a:hover {
-        background-color: #7e4c1a;
-    }
-
-    form>.button-group {
-        display: flex;
-        gap: 15px;
-        justify-content: flex-end;
-        margin-top: 20px;
+    .btn-secondary:hover {
+        background-color: #634324;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 </style>
 
 @section('content')
-    <div>
-        <h2>Editar Producto</h2>
+    <div class="edit-container">
+        <div class="edit-header">
+            <h2>Editar Producto</h2>
+        </div>
 
-        <form action="{{ route('products.update', $product) }}" method="PUT" enctype="multipart/form-data">
-            <div class="button-group">
-                @csrf
-                @method('PUT')
-                @include('productos.form', ['product' => $product])
-                <button type="submit">Actualizar</button>
-                <a href="{{ route('products.index') }}">Volver</a>
+        <form action="{{ route('products.update', $product) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            @include('productos.form', ['product' => $product])
+
+            <div class="form-actions">
+                <a href="{{ route('productos.index') }}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Actualizar Producto</button>
             </div>
         </form>
     </div>
