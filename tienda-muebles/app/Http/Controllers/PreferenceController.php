@@ -9,46 +9,42 @@ class PreferenceController extends Controller
 {
     public function index()
     {
-        // Obtener preferencias según el estado de autenticación
-        $preferences = $this->getPreferences();
+        $preferencias = $this->getPreferences();
 
-        return view('preferences.index', compact('preferences'));
+        return view('preferences.index', compact('preferencias'));
     }
 
-    /**
-     * Actualiza las preferencias del usuario autenticado en la base de datos
-     */
     public function update(Request $request)
     {
-        // Solo para usuarios autenticados
-        if (!Auth::check()) {
-            return redirect()->route('preferences')->with('error', 'Debes iniciar sesión para guardar preferencias');
-        }
-
-        // Validar los datos
         $validated = $request->validate([
             'paginacion' => 'required|integer|in:6,12,24,48',
             'tema' => 'required|string|in:light,dark',
             'moneda' => 'required|string|in:€,$,£',
         ]);
 
-        // Actualizar preferencias del usuario
-        $user = Auth::user();
-        $user->tema = $validated['tema'];
-        $user->moneda = $validated['moneda'];
-        $user->paginacion = $validated['paginacion'];
-        $user->save();
+        if (Auth::check()) {
+            $user = Auth::user();
+            $user->tema = $validated['tema'];
+            $user->moneda = $validated['moneda'];
+            $user->paginacion = $validated['paginacion'];
+            $user->save();
 
-        return redirect()->route('preferences')->with('success', 'Preferencias actualizadas correctamente');
+            return redirect()->route('preferences')->with('success', "Preferencias actualizadas");
+        } else {
+            $cookieDuration = 43200; // 30 days (in minutes)
+            $cookieTheme = cookie('tema', $validated['tema'], $cookieDuration);
+            $cookieCurrency = cookie('moneda', $validated['moneda'], $cookieDuration);
+            $cookiePagination = cookie('paginacion', $validated['paginacion'], $cookieDuration);
+
+            return redirect()->route('preferences')
+                ->with('success', "Preferencias guardadas")
+                ->withCookies([$cookieTheme, $cookieCurrency, $cookiePagination]);
+        }
     }
 
-    /**
-     * Obtiene las preferencias del usuario (desde BD si está autenticado, desde cookies si no)
-     */
     private function getPreferences()
     {
         if (Auth::check()) {
-            // Usuario autenticado: obtener de la base de datos
             $user = Auth::user();
             return (object) [
                 'tema' => $user->tema ?? 'light',
@@ -56,7 +52,6 @@ class PreferenceController extends Controller
                 'paginacion' => $user->paginacion ?? 12,
             ];
         } else {
-            // Usuario invitado: obtener de cookies o valores por defecto
             return (object) [
                 'tema' => request()->cookie('tema', 'light'),
                 'moneda' => request()->cookie('moneda', '€'),
