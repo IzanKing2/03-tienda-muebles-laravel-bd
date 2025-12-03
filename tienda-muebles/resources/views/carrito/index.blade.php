@@ -4,10 +4,7 @@
         font-family: 'Arial', sans-serif;
     }
     
-        body {
-        font-family: var(--font-family-sans);
-        background-color: #f8f9fa;
-        color: var(--color-text-dark);
+    body {
         margin: 0;
         padding: 0;
         background-color: #976f47;
@@ -104,9 +101,35 @@
     }
 
     th, td {
-        padding: 12px 12px;
+        padding: 12px 6px;
         text-align: left;
-        border-bottom: 1px solid var(--color-border);
+    }
+
+    td button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        line-height: 1;
+    }
+
+    td button[title="Actualizar cantidad"] {
+        background-color: #0079cf;
+    }
+
+    td button[title="Actualizar cantidad"]:hover {
+        background-color: #0056b3;
+    }
+
+    td button[title="Eliminar producto"] {
+        background-color: #d82336;
+    }
+
+    td button[title="Eliminar producto"]:hover {
+        background-color: #af1f2e;
     }
 
     th {
@@ -136,7 +159,6 @@
         max-width: 300px;
         margin-left: auto;
         padding: 15px;
-        border: 1px solid var(--color-border);
         border-radius: 4px;
         background-color: #f8f9fa;
     }
@@ -235,16 +257,12 @@
                                     <form action="{{ route('carrito.update', $id) }}" method="POST">
                                         @csrf
                                         <input type="number" name="cantidad" value="{{ $item['cantidad'] }}" min="1">
-                                        <button type="submit" title="Actualizar cantidad">
-                                            <i></i>
-                                        </button>
+                                        <button type="submit" title="Actualizar cantidad">Actualizar</button>
                                     </form>
                                     <form action="{{ route('carrito.remove', $id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" title="Eliminar producto">
-                                            <i></i>
-                                        </button>
+                                        <button type="submit" title="Eliminar producto">Eliminar Producto</button>
                                     </form>
                                 </div>
                             </td>
