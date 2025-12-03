@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
+
 class CarritoController extends Controller
 {
 
@@ -58,7 +61,8 @@ class CarritoController extends Controller
 
             // Validar que no exceda el stock al incrementar
             if ($carrito[$id]['cantidad'] + 1 > $producto->stock) {
-                return redirect()->back()->with('error',
+                return redirect()->back()->with(
+                    'error',
                     "Stock insuficiente para {$producto->nombre}. Disponible: {$producto->stock}"
                 );
             }
@@ -78,7 +82,8 @@ class CarritoController extends Controller
         Session::put('carrito', $carrito);
 
         // Redirigir al carrito con mensaje de éxito
-        return redirect()->route('carrito.index')->with('success',
+        return redirect()->route('carrito.index')->with(
+            'success',
             "✅ {$producto->nombre} añadido al carrito."
         );
     }
@@ -98,7 +103,8 @@ class CarritoController extends Controller
 
         // VALIDACIÓN DE STOCK: Verificar que hay suficiente stock
         if ($request->cantidad > $producto->stock) {
-            return redirect()->back()->with('error',
+            return redirect()->back()->with(
+                'error',
                 "Stock insuficiente. Disponible: {$producto->stock}"
             );
         }
@@ -125,7 +131,8 @@ class CarritoController extends Controller
             unset($carrito[$id]);
             Session::put('carrito', $carrito);
 
-            return redirect()->route('carrito.index')->with('success',
+            return redirect()->route('carrito.index')->with(
+                'success',
                 "✅ {$nombreProducto} eliminado del carrito."
             );
         }
@@ -146,7 +153,8 @@ class CarritoController extends Controller
     {
         // VALIDAR AUTENTICACIÓN
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error',
+            return redirect()->route('login')->with(
+                'error',
                 'Debes iniciar sesión para guardar el carrito.'
             );
         }
@@ -156,7 +164,8 @@ class CarritoController extends Controller
 
         // VALIDAR QUE NO ESTÉ VACÍO
         if (empty($carritoSesion)) {
-            return redirect()->route('carrito.index')->with('error',
+            return redirect()->route('carrito.index')->with(
+                'error',
                 'El carrito está vacío.'
             );
         }
@@ -167,51 +176,71 @@ class CarritoController extends Controller
 
             // Producto no existe
             if (!$producto) {
-                return redirect()->route('carrito.index')->with('error',
+                return redirect()->route('carrito.index')->with(
+                    'error',
                     "Producto no encontrado: {$item['nombre']}"
                 );
             }
 
             // Stock insuficiente
             if ($producto->stock < $item['cantidad']) {
-                return redirect()->route('carrito.index')->with('error',
+                return redirect()->route('carrito.index')->with(
+                    'error',
                     "Stock insuficiente para: {$item['nombre']}. Disponible: {$producto->stock}"
                 );
             }
         }
 
-        // CREAR REGISTRO EN LA TABLA CARRITOS
-        $carrito = Carrito::create([
-            'user_id' => Auth::id(),
-            'sesion_id' => session()->getId(), // ID único de sesión/navegador
-            'total' => 0,
-        ]);
+        try {
+            DB::beginTransaction();
 
-        $totalCarrito = 0;
-
-        // GUARDAR CADA ITEM EN LA TABLA CARRITO_ITEMS
-        foreach ($carritoSesion as $id => $item) {
-            CarritoItem::create([
-                'carrito_id' => $carrito->id,
-                'producto_id' => $id,
-                'cantidad' => $item['cantidad'],
-                'precio_unitario' => $item['precio'],
+            // CREAR REGISTRO EN LA TABLA CARRITOS
+            $carrito = Carrito::create([
+                'usuario_id' => Auth::id(),
+                'sesion_id' => session()->getId(), // ID único de sesión/navegador
+                'total' => 0,
             ]);
 
-            // Calcular el total
-            $totalCarrito += $item['cantidad'] * $item['precio'];
+            $totalCarrito = 0;
+
+            // GUARDAR CADA ITEM EN LA TABLA CARRITO_ITEMS Y REDUCIR STOCK
+            foreach ($carritoSesion as $id => $item) {
+                CarritoItem::create([
+                    'carrito_id' => $carrito->id,
+                    'producto_id' => $id,
+                    'cantidad' => $item['cantidad'],
+                    'precio_unitario' => $item['precio'],
+                ]);
+
+                // Reducir stock del producto
+                $producto = Producto::find($id);
+                $producto->reducirStock($item['cantidad']);
+
+                // Calcular el total
+                $totalCarrito += $item['cantidad'] * $item['precio'];
+            }
+
+            // GUARDAR EL TOTAL EN EL CARRITO
+            $carrito->update(['total' => $totalCarrito]);
+
+            DB::commit();
+
+            // VACIAR LA SESIÓN (carrito de sesión)
+            Session::forget('carrito');
+
+            // REDIRIGIR CON ÉXITO
+            return redirect()->route('carrito.index')->with(
+                'success',
+                "✅ ¡Pedido guardado correctamente! ID del pedido: #{$carrito->id}"
+            );
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('carrito.index')->with(
+                'error',
+                'Ocurrió un error al procesar el pedido: ' . $e->getMessage()
+            );
         }
-
-        // GUARDAR EL TOTAL EN EL CARRITO
-        $carrito->update(['total' => $totalCarrito]);
-
-        // VACIAR LA SESIÓN (carrito de sesión)
-        Session::forget('carrito');
-
-        // REDIRIGIR CON ÉXITO
-        return redirect()->route('carrito.index')->with('success',
-            "✅ ¡Pedido guardado correctamente! ID del pedido: #{$carrito->id}"
-        );
     }
 
     // Ver historial de pedidos del usuario
@@ -223,21 +252,32 @@ class CarritoController extends Controller
         }
 
         // Obtener todos los carritos del usuario autenticado, con sus items
-        $carritos = Carrito::where('user_id', Auth::id())
-                           ->with('items.producto') // Eager loading para optimizar
-                           ->orderBy('created_at', 'desc') // Más recientes primero
-                           ->paginate(10); // Paginación: 10 por página
+        $carritos = Carrito::where('usuario_id', Auth::id())
+            ->with('items.producto') // Eager loading para optimizar
+            ->orderBy('created_at', 'desc') // Más recientes primero
+            ->paginate(10); // Paginación: 10 por página
 
         return view('carrito.historial', compact('carritos'));
     }
 
     // Guardar preferencias del usuario en cookies
-
     public function GuardarCookiePreferencia(Request $request)
     {
         $paginacion = $request->input('paginacion');
         $tema = $request->input('tema');
         $moneda = $request->input('moneda');
+
+        if ($paginacion) {
+            Cookie::queue('paginacion', $paginacion, 60 * 24 * 30); // 30 días
+        }
+        if ($tema) {
+            Cookie::queue('tema', $tema, 60 * 24 * 30);
+        }
+        if ($moneda) {
+            Cookie::queue('moneda', $moneda, 60 * 24 * 30);
+        }
+
+        return redirect()->back()->with('success', 'Preferencias guardadas correctamente.');
     }
 
     public function verDetalles($id)
@@ -249,10 +289,10 @@ class CarritoController extends Controller
 
         // Buscar el carrito con sus items y productos
         $carrito = Carrito::with('items.producto')
-                          ->findOrFail($id);
+            ->findOrFail($id);
 
         // SEGURIDAD: Validar que el carrito pertenezca al usuario autenticado
-        if ($carrito->user_id !== Auth::id()) {
+        if ($carrito->usuario_id !== Auth::id()) {
             abort(403, 'No tienes permiso para ver este carrito.');
         }
 

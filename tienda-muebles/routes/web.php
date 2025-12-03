@@ -36,7 +36,7 @@ Route::get('/preferences', [PreferenceController::class, 'index'])->name('prefer
 Route::post('/preferences/cookie', [CarritoController::class, 'GuardarCookiePreferencia'])->name('preferences.cookie');
 
 // Rutas de carrito
-Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
+Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito.index');
 
 // Agregar producto al carrito
 Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])->name('carrito.agregar');
