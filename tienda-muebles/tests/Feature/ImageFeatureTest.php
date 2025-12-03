@@ -25,7 +25,10 @@ class ImageFeatureTest extends TestCase
         ]);
 
         $response->assertRedirect(route('imagen_productos.index'));
-        $this->assertDatabaseHas('imagenes', ['producto_id' => $product->id]);
+
+        $this->assertDatabaseHas('galerias', ['producto_id' => $product->id]);
+        $galeria = \App\Models\Galeria::where('producto_id', $product->id)->first();
+        $this->assertDatabaseHas('imagenes', ['galeria_id' => $galeria->id]);
 
         // Verify file storage
         // Note: Controller stores in 'productos' folder

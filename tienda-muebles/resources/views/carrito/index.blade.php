@@ -3,8 +3,11 @@
     * {
         font-family: 'Arial', sans-serif;
     }
-    
+
     body {
+        font-family: var(--font-family-sans);
+        background-color: #f8f9fa;
+        color: var(--color-text-dark);
         margin: 0;
         padding: 0;
         background-color: #976f47;
@@ -19,7 +22,7 @@
         box-shadow: 0 4px 8px #33261ba8;
     }
 
-    .container > div:has(button[data-bs-dismiss="alert"]) {
+    .container>div:has(button[data-bs-dismiss="alert"]) {
         padding: 15px;
         margin-bottom: 20px;
         border: 1px solid transparent;
@@ -30,12 +33,12 @@
         font-weight: bold;
     }
 
-    .container > div:has(button[data-bs-dismiss="alert"]):first-child { 
+    .container>div:has(button[data-bs-dismiss="alert"]):first-child {
         background-color: #d4edda;
         border-color: #c3e6cb;
     }
 
-    .container > div:has(button[data-bs-dismiss="alert"]):nth-child(2) { 
+    .container>div:has(button[data-bs-dismiss="alert"]):nth-child(2) {
         background-color: #f8d7da;
         border-color: #f5c6cb;
     }
@@ -55,7 +58,7 @@
         content: "×";
     }
 
-    .container > div:first-child:not(:has(button[data-bs-dismiss="alert"])) {
+    .container>div:first-child:not(:has(button[data-bs-dismiss="alert"])) {
         text-align: center;
         padding: 50px 20px;
         border: 2px dashed var(--color-border);
@@ -63,13 +66,13 @@
         margin-bottom: 20px;
     }
 
-    .container > div:first-child:not(:has(button[data-bs-dismiss="alert"])) p {
+    .container>div:first-child:not(:has(button[data-bs-dismiss="alert"])) p {
         font-size: 1.25rem;
         margin-bottom: 15px;
         color: var(--color-text-dark);
     }
 
-    .container > div:first-child:not(:has(button[data-bs-dismiss="alert"])) a {
+    .container>div:first-child:not(:has(button[data-bs-dismiss="alert"])) a {
         background-color: #5c4033;
         color: #fff;
         padding: 10px 20px;
@@ -80,11 +83,11 @@
         align-items: center;
     }
 
-    .container > div:first-child:not(:has(button[data-bs-dismiss="alert"])) a:hover {
+    .container>div:first-child:not(:has(button[data-bs-dismiss="alert"])) a:hover {
         background-color: #7b5b4e;
     }
 
-    .container > div:first-child:not(:has(button[data-bs-dismiss="alert"])) i {
+    .container>div:first-child:not(:has(button[data-bs-dismiss="alert"])) i {
         margin-right: 8px;
     }
 
@@ -100,8 +103,9 @@
         color: #fff;
     }
 
-    th, td {
-        padding: 12px 6px;
+    th,
+    td {
+        padding: 12px 12px;
         text-align: left;
     }
 
@@ -154,7 +158,7 @@
         font-size: 0.8rem;
     }
 
-    .container > div:nth-last-child(2):not(:has(a)) {
+    .container>div:nth-last-child(2):not(:has(a)) {
         width: 100%;
         max-width: 300px;
         margin-left: auto;
@@ -163,30 +167,30 @@
         background-color: #f8f9fa;
     }
 
-    .container > div:nth-last-child(2):not(:has(a)) p {
+    .container>div:nth-last-child(2):not(:has(a)) p {
         display: flex;
         justify-content: space-between;
         margin: 5px 0;
         padding: 3px 0;
     }
 
-    .container > div:nth-last-child(2):not(:has(a)) p:last-child {
+    .container>div:nth-last-child(2):not(:has(a)) p:last-child {
         font-weight: bold;
         padding-top: 10px;
         margin-top: 10px;
         font-size: 1.1rem;
     }
 
-    .container > div:nth-last-child(2):not(:has(a)) span {
+    .container>div:nth-last-child(2):not(:has(a)) span {
         font-weight: normal;
     }
 
-    .container > div:last-child {
+    .container>div:last-child {
         text-align: right;
         margin-top: 20px;
     }
 
-    .container > div:last-child button {
+    .container>div:last-child button {
         background-color: #5c4033;
         color: #fff;
         border: none;
@@ -198,21 +202,21 @@
         font-weight: bold;
     }
 
-    .container > div:last-child button:hover {
+    .container>div:last-child button:hover {
         background-color: #7b5b4e;
     }
 </style>
 
 @section('content')
-<div class="container mt-5 mb-5">
-  <h2>Carrito de Compra</h2>
+    <div class="container mt-5 mb-5">
+        <h2>Carrito de Compra</h2>
 
-  {{-- Mensajes flash --}}
-  @if (session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-  @elseif (session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
-  @endif
+        {{-- Mensajes flash --}}
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @elseif (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
 
         @if (empty($carrito))
             <div>
@@ -240,7 +244,7 @@
                             <td>{{ $item['nombre'] }}</td>
                             <td>
                                 @if ($item['imagen'])
-                                    <img src="{{ asset('storage/' . $item['imagen']) }}">
+                                    <img src="{{ asset($item['imagen']) }}">
                                 @else
                                     <span>No hay imagenes</span>
                                 @endif
@@ -250,12 +254,14 @@
                             <td>{{ number_format($item['precio'] * $item['cantidad'], 2)}}€</td>
                             <td>
                                 <div>
-                                    <form action="{{ route('carrito.update', $id) }}" method="POST">
+                                    <form action="{{ route('carrito.actualizar') }}" method="POST">
                                         @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="producto_id" value="{{ $id }}">
                                         <input type="number" name="cantidad" value="{{ $item['cantidad'] }}" min="1">
                                         <button type="submit" title="Actualizar cantidad">Actualizar</button>
                                     </form>
-                                    <form action="{{ route('carrito.remove', $id) }}" method="POST">
+                                    <form action="{{ route('carrito.eliminar', $id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" title="Eliminar producto">Eliminar Producto</button>
@@ -267,36 +273,37 @@
                 </tbody>
             </table>
 
-    {{-- Resumen del pedido --}}
-    <div class="row">
-      <div class="col-md-4 offset-md-8">
-        <div class="card">
-          <div class="card-body">
-            <p>Subtotal: {{ number_format($subtotal, 2) }} €</p>
-            <p>Impuestos (10%): {{ number_format($impuestos, 2) }} €</p>
-            <p><strong>Total: {{ number_format($total, 2) }} €</strong></p>
-            @auth
-              <form action="{{ route('carrito.guardar') }}" method="POST" class="mb-2">
-                @csrf
-                <button type="submit" class="btn btn-success w-100">
-                  <i class="bi bi-check-circle"></i> Confirmar Pedido
-                </button>
-              </form>
-            @else
-              <a href="{{ route('login') }}" class="btn btn-success w-100 mb-2">
-                <i class="bi bi-box-arrow-in-right"></i> Inicia sesión para comprar
-              </a>
-            @endauth
-            <form action="{{ route('carrito.vaciar') }}" method="POST">
-              @csrf @method('DELETE')
-              <button type="submit" class="btn btn-outline-danger w-100" onclick="return confirm('¿Deseas vaciar el carrito?')">
-                <i class="bi bi-trash"></i> Vaciar Carrito
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+            {{-- Resumen del pedido --}}
+            <div class="row">
+                <div class="col-md-4 offset-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Subtotal: {{ number_format($subtotal, 2) }} €</p>
+                            <p>Impuestos (10%): {{ number_format($impuestos, 2) }} €</p>
+                            <p><strong>Total: {{ number_format($total, 2) }} €</strong></p>
+                            @auth
+                                <form action="{{ route('carrito.guardar') }}" method="POST" class="mb-2">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="bi bi-check-circle"></i> Confirmar Pedido
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="btn btn-success w-100 mb-2">
+                                    <i class="bi bi-box-arrow-in-right"></i> Inicia sesión para comprar
+                                </a>
+                            @endauth
+                            <form action="{{ route('carrito.vaciar') }}" method="POST">
+                                @csrf @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger w-100"
+                                    onclick="return confirm('¿Deseas vaciar el carrito?')">
+                                    <i class="bi bi-trash"></i> Vaciar Carrito
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
-  @endif
-</div>
 @endsection

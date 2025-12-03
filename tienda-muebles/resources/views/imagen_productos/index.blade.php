@@ -18,7 +18,7 @@
     }
 
     div {
-        max-width: 800px;
+        max-width: 900px;
         margin: 40px auto;
         padding: 20px;
         background: #ffffff;
@@ -43,12 +43,6 @@
         background: #d4edda;
         color: #155724;
         border-left: 4px solid #28a745;
-    }
-
-    .alert-danger {
-        background: #f8d7da;
-        color: #721c24;
-        border-left: 4px solid #dc3545;
     }
 
     div>a {
@@ -96,6 +90,14 @@
         padding: 12px;
     }
 
+    td img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
     td a {
         display: inline-block;
         padding: 6px 10px;
@@ -133,36 +135,37 @@
 
 @section('content')
     <div>
-        <h2>Listado de Categorías</h2>
+        <h2>Galería de Imágenes</h2>
 
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
-        @if(session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-        @endif
 
-        <a href="{{ route('categories.create') }}">Nueva Categoría</a>
+        <a href="{{ route('imagen_productos.create') }}">Nueva Imagen</a>
 
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nombre</th>
+                    <th>Producto</th>
+                    <th>Imagen</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($categories as $category)
+                @foreach ($imagenes as $imagen)
                     <tr>
-                        <td>{{ $category->id }}</td>
-                        <td>{{ $category->nombre }}</td>
+                        <td>{{ $imagen->id }}</td>
+                        <td>{{ $imagen->galeria->producto->nombre ?? 'Sin Producto' }}</td>
                         <td>
-                            <a href="{{ route('categories.edit', $category) }}">Editar</a>
-                            <form action="{{ route('categories.destroy', $category) }}" method="POST">
+                            <img src="{{ asset('storage/' . $imagen->ruta) }}" alt="Imagen">
+                        </td>
+                        <td>
+                            <a href="{{ route('imagen_productos.edit', $imagen) }}">Editar</a>
+                            <form action="{{ route('imagen_productos.destroy', $imagen) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button onclick="return confirm('¿Eliminar categoría?')">Eliminar</button>
+                                <button onclick="return confirm('¿Eliminar imagen?')">Eliminar</button>
                             </form>
                         </td>
                     </tr>
@@ -171,7 +174,7 @@
         </table>
 
         <div style="margin-top: 20px;">
-            {{ $categories->links() }}
+            {{ $imagenes->links() }}
         </div>
     </div>
 @endsection

@@ -25,18 +25,18 @@ class ImagenProductoController extends Controller
     {
         $request->validate([
             'producto_id' => 'required|exists:productos,id',
-            'url_imagen'  => 'required_without:archivo|nullable|url',
-            'archivo'     => 'required_without:url_imagen|nullable|image|max:2048',
+            'archivo' => 'required|image|max:2048',
         ]);
 
+        // Buscar o crear galería para el producto
+        $galeria = \App\Models\Galeria::firstOrCreate(['producto_id' => $request->producto_id]);
+
         $imagen = new Imagen();
-        $imagen->producto_id = $request->producto_id;
+        $imagen->galeria_id = $galeria->id;
 
         if ($request->hasFile('archivo')) {
-            $path = $request->file('archivo')->store('productos', 'public');
-            $imagen->url_imagen = Storage::url($path);
-        } else {
-            $imagen->url_imagen = $request->url_imagen;
+            $path = $request->file('archivo')->store('galerias', 'public');
+            $imagen->ruta = $path; // Guardar solo la ruta relativa
         }
 
         $imagen->save();
@@ -44,44 +44,47 @@ class ImagenProductoController extends Controller
         return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto creada correctamente');
     }
 
-    public function show(Imagen $imagen)
+    public function show(Imagen $imagenProducto)
     {
-        return view('imagen_productos.show', compact('imagen'));
+        return view('imagen_productos.show', ['imagen' => $imagenProducto]);
     }
 
-    public function edit(Imagen $imagen)
+    public function edit(Imagen $imagenProducto)
     {
         $productos = Producto::orderBy('nombre')->pluck('nombre', 'id');
-        return view('imagen_productos.edit', compact('imagen', 'productos'));
+        return view('imagen_productos.edit', ['imagen' => $imagenProducto, 'productos' => $productos]);
     }
 
-    public function update(Request $request, Imagen $imagen)
+    public function update(Request $request, Imagen $imagenProducto)
     {
         $request->validate([
             'producto_id' => 'required|exists:productos,id',
-            'url_imagen'  => 'required_without:archivo|nullable|url',
-            'archivo'     => 'required_without:url_imagen|nullable|image|max:2048',
+            'archivo' => 'nullable|image|max:2048',
         ]);
 
-        $imagen->producto_id = $request->producto_id;
-
-        if ($request->hasFile('archivo')) {
-            // opcional: eliminar archivo anterior si se guardó localmente
-            $path = $request->file('archivo')->store('productos', 'public');
-            $imagen->url_imagen = Storage::url($path);
-        } else {
-            $imagen->url_imagen = $request->url_imagen;
+        // Si cambia el producto, cambiar la galería
+        if ($imagenProducto->galeria->producto_id != $request->producto_id) {
+            $galeria = \App\Models\Galeria::firstOrCreate(['producto_id' => $request->producto_id]);
+            $imagenProducto->galeria_id = $galeria->id;
         }
 
-        $imagen->save();
+        if ($request->hasFile('archivo')) {
+            // Eliminar archivo anterior
+            $imagenProducto->eliminarArchivo();
+
+            $path = $request->file('archivo')->store('galerias', 'public');
+            $imagenProducto->ruta = $path;
+        }
+
+        $imagenProducto->save();
 
         return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto actualizada correctamente');
     }
 
-    public function destroy(Imagen $imagen)
+    public function destroy(Imagen $imagenProducto)
     {
         // opcional: borrar archivo físico si procede
-        $imagen->delete();
+        $imagenProducto->delete();
         return redirect()->route('imagen_productos.index')->with('success', 'Imagen de producto eliminada correctamente');
     }
 }

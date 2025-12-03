@@ -73,7 +73,7 @@ class CarritoController extends Controller
                 'nombre' => $producto->nombre,
                 'precio' => $producto->precio,
                 'cantidad' => 1,
-                'imagen' => $producto->imagen ?? null,
+                'imagen' => $producto->imagen_principal ?? null,
                 'producto_id' => $id,
             ];
         }

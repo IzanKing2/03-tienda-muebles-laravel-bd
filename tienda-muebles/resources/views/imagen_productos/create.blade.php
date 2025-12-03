@@ -71,7 +71,8 @@
         color: #555;
     }
 
-    input[type="text"] {
+    select,
+    input[type="file"] {
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
@@ -82,22 +83,34 @@
 
 @section('content')
     <div>
-        <h2>Editar Categoría</h2>
+        <h2>Nueva Imagen de Galería</h2>
 
-        <form action="{{ route('categories.update', $category) }}" method="POST">
+        <form action="{{ route('imagen_productos.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
 
             <div class="form-group">
-                <label for="nombre">Nombre de la Categoría</label>
-                <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $category->nombre) }}" required>
-                @error('nombre')
+                <label for="producto_id">Producto</label>
+                <select name="producto_id" id="producto_id" required>
+                    <option value="">-- Seleccionar Producto --</option>
+                    @foreach($productos as $id => $nombre)
+                        <option value="{{ $id }}">{{ $nombre }}</option>
+                    @endforeach
+                </select>
+                @error('producto_id')
                     <span style="color: red; font-size: 0.9em;">{{ $message }}</span>
                 @enderror
             </div>
 
-            <button type="submit">Actualizar</button>
-            <a href="{{ route('categories.index') }}">Volver</a>
+            <div class="form-group">
+                <label for="archivo">Imagen</label>
+                <input type="file" name="archivo" id="archivo" accept="image/*" required>
+                @error('archivo')
+                    <span style="color: red; font-size: 0.9em;">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <button type="submit">Guardar</button>
+            <a href="{{ route('imagen_productos.index') }}">Volver</a>
         </form>
     </div>
 @endsection

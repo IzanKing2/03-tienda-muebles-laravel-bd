@@ -79,19 +79,19 @@
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 4px;
-        box-sizing: border-box; 
+        box-sizing: border-box;
     }
 </style>
 
 @section('content')
-<div>
-    <h2>Nuevo Producto</h2>
+    <div>
+        <h2>Nuevo Producto</h2>
 
-    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        @include('products.form')
-        <button type="submit">Guardar</button>
-        <a href="{{ route('productos.index') }}">Volver</a>
-    </form>
-</div>
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @include('productos.form')
+            <button type="submit">Guardar</button>
+            <a href="{{ route('productos.index') }}">Volver</a>
+        </form>
+    </div>
 @endsection

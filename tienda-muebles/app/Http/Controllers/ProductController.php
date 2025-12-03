@@ -40,6 +40,7 @@ class ProductController extends Controller
             'dimensiones' => 'required|string|max:100',
             'color_principal' => 'required|string|max:50',
             'categoria_id' => 'required|exists:categorias,id',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $producto = new Producto();
@@ -51,7 +52,12 @@ class ProductController extends Controller
         $producto->dimensiones = $request->dimensiones;
         $producto->color_principal = $request->color_principal;
         $producto->precio = $request->precio;
-        // $producto->categoria_id = $request->categoria_id; // Remove this
+
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('productos', 'public');
+            $producto->imagen_principal = 'storage/' . $path;
+        }
+
         $producto->save();
 
         // Guardar relación con categoría
@@ -88,6 +94,11 @@ class ProductController extends Controller
             'descripcion' => 'required|string',
             'precio' => 'required|numeric|min:0',
             'categoria_id' => 'required|exists:categorias,id',
+            'stock' => 'required|integer|min:0',
+            'materiales' => 'required|string',
+            'dimensiones' => 'required|string|max:100',
+            'color_principal' => 'required|string|max:50',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $product->nombre = $request->nombre;
@@ -97,7 +108,12 @@ class ProductController extends Controller
         $product->materiales = $request->materiales;
         $product->dimensiones = $request->dimensiones;
         $product->color_principal = $request->color_principal;
-        // $product->categoria_id = $request->categoria_id; // Remove this
+
+        if ($request->hasFile('imagen')) {
+            $path = $request->file('imagen')->store('productos', 'public');
+            $product->imagen_principal = 'storage/' . $path;
+        }
+
         $product->save();
 
         // Actualizar relación con categoría

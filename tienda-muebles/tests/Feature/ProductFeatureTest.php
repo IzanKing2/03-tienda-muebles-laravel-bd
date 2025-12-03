@@ -22,9 +22,10 @@ class ProductFeatureTest extends TestCase
 
     public function test_can_create_product()
     {
+        $admin = \App\Models\User::factory()->admin()->create();
         $category = \App\Models\Categoria::factory()->create();
 
-        $response = $this->post(route('products.store'), [
+        $response = $this->actingAs($admin)->post(route('products.store'), [
             'nombre' => 'Nuevo Producto',
             'descripcion' => 'Descripción del producto',
             'precio' => 100.50,
@@ -41,10 +42,11 @@ class ProductFeatureTest extends TestCase
 
     public function test_can_update_product()
     {
+        $admin = \App\Models\User::factory()->admin()->create();
         $product = Producto::factory()->create();
         $category = \App\Models\Categoria::factory()->create();
 
-        $response = $this->put(route('products.update', $product), [
+        $response = $this->actingAs($admin)->put(route('products.update', $product), [
             'nombre' => 'Producto Actualizado',
             'descripcion' => 'Nueva descripción',
             'precio' => 200.00,
@@ -61,9 +63,10 @@ class ProductFeatureTest extends TestCase
 
     public function test_can_delete_product()
     {
+        $admin = \App\Models\User::factory()->admin()->create();
         $product = Producto::factory()->create();
 
-        $response = $this->delete(route('products.destroy', $product));
+        $response = $this->actingAs($admin)->delete(route('products.destroy', $product));
 
         $response->assertRedirect(route('productos.index'));
         $this->assertDatabaseMissing('productos', ['id' => $product->id]);
