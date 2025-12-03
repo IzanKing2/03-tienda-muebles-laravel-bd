@@ -20,7 +20,11 @@ return new class extends Migration {
                 ->onDelete('cascade'); // Si se borra el usuario se borran sus carritos
 
             // SesionId único por pestaña/navegador
-            $table->string('sesion_id', 100)->unique();
+            $table->string('sesion_id', 100)->unique()
+                ->nullable()
+                ->index();
+
+            $table->decimal('total', 10, 2)->default(0);
 
             $table->timestamps();
 
