@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 
 class CarritoItem extends Model
@@ -37,5 +38,13 @@ class CarritoItem extends Model
     public function producto()
     {
         return $this->belongsTo(Producto::class, 'producto_id');
+    }
+
+    /**
+     * Obtener el subtotal del item (cantidad * precio_unitario)
+     */
+    public function getSubtotalAttribute()
+    {
+        return $this->cantidad * $this->precio_unitario;
     }
 }
