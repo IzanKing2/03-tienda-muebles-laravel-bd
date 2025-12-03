@@ -186,6 +186,7 @@
 
     .info-producto a:hover {
         background-color: #7b5b4e;
+        color: white;
     }
 
     @media (max-width: 900px) {
