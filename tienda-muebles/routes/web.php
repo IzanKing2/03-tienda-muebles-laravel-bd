@@ -39,5 +39,7 @@ Route::put('/preferences', [PreferenceController::class, 'update'])->name('prefe
 
 // Rutas de carrito
 Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
+Route::post('/carrito/{id}/update', [CarritoController::class, 'updateCantidad'])->name('carrito.update');
+Route::delete('/carrito/{id}', [CarritoController::class, 'removeProducto'])->name('carrito.remove');
 
 ?>

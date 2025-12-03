@@ -1,36 +1,37 @@
 <style>
-    body {
-        background-color: #976f47;
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
 
-    div {
-        max-width: 600px;
-        margin: 40px auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 8px; 
-        background-color: #f9f9f9;
-        font-family: Arial, sans-serif;
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group.full-width {
+        grid-column: span 2;
     }
 
     label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #333;
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #555;
     }
 
     input[type="text"],
     input[type="number"],
-    input[type="file"],
     textarea,
     select {
         width: 100%;
-        padding: 10px;
+        padding: 12px;
         border: 1px solid #ddd;
-        border-radius: 4px;
+        border-radius: 6px;
         box-sizing: border-box;
-        font-size: 16px;
-        transition: border-color 0.3s;
+        font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background-color: #fff;
     }
 
     input[type="text"]:focus,
@@ -39,58 +40,78 @@
     select:focus {
         border-color: #7c542d;
         outline: none;
-        box-shadow: 0 0 5px #33261ba8;
+        box-shadow: 0 0 0 3px rgba(124, 84, 45, 0.1);
     }
 
     textarea {
         resize: vertical;
-        min-height: 100px;
+        min-height: 120px;
     }
 
-    form > div > img {
-        margin-top: 10px;
-        border: 1px solid #ccc;
+    .file-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+    }
+
+    .image-preview {
+        margin-top: 15px;
+        padding: 10px;
+        border: 1px dashed #ccc;
+        border-radius: 6px;
+        display: inline-block;
+        background-color: #fff;
+    }
+    
+    .image-preview img {
+        max-width: 150px;
         border-radius: 4px;
         display: block;
     }
 </style>
 
-<div>
-    <label>Nombre</label>
-    <input type="text" name="nombre" value="{{ old('nombre', $producto->nombre ?? '') }}" required>
-</div>
+<div class="form-grid">
+    <div class="form-group full-width">
+        <label for="nombre">Nombre del Producto</label>
+        <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $product->nombre ?? '') }}" required placeholder="Ej: Mesa de Comedor Roble">
+    </div>
 
-<div>
-    <label>Descripción</label>
-    <textarea name="descripcion">{{ old('descripcion', $producto->descripcion ?? '') }}</textarea>
-</div>
+    <div class="form-group full-width">
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" placeholder="Describe los detalles del producto...">{{ old('descripcion', $product->descripcion ?? '') }}</textarea>
+    </div>
 
-<div>
-    <label>Precio (€)</label>
-    <input type="number" name="precio" step="0.01" value="{{ old('precio', $producto->precio ?? '') }}" required>
-</div>
+    <div class="form-group">
+        <label for="precio">Precio (€)</label>
+        <input type="number" id="precio" name="precio" step="0.01" value="{{ old('precio', $product->precio ?? '') }}" required placeholder="0.00">
+    </div>
 
-<div>
-    <label>Stock</label>
-    <input type="number" name="stock" value="{{ old('stock', $producto->stock ?? '') }}" required>
-</div>
+    <div class="form-group">
+        <label for="stock">Stock Disponible</label>
+        <input type="number" id="stock" name="stock" value="{{ old('stock', $product->stock ?? '') }}" required placeholder="0">
+    </div>
 
-<div>
-    <label>Categoría</label>
-    <select name="categoria_id">
-        <option value="">-- Sin categoría --</option>
-        @foreach ($categorias as $categoria)
-            <option value="{{ $categoria->id }}" @selected(old('categoria_id', $producto->categoria_id ?? '') == $categoria->id)>
-                {{ $categoria->nombre }}
-            </option>
-        @endforeach
-    </select>
-</div>
+    <div class="form-group full-width">
+        <label for="categoria_id">Categoría</label>
+        <select id="categoria_id" name="categoria_id">
+            <option value="">-- Seleccionar Categoría --</option>
+            @foreach ($categorias as $categoria)
+                <option value="{{ $categoria->id }}" @selected(old('categoria_id', $product->categoria_id ?? '') == $categoria->id)>
+                    {{ $categoria->nombre }}
+                </option>
+            @endforeach
+        </select>
+    </div>
 
-<div>
-    <label>Imagen</label>
-    <input type="file" name="imagen">
-    @if (!empty($producto->imagen))
-        <img src="{{ asset($producto->imagen) }}" width="80">
-    @endif
+    <div class="form-group full-width">
+        <label for="imagen">Imagen del Producto</label>
+        <input type="file" id="imagen" name="imagen" accept="image/*">
+        
+        @if (!empty($product->imagen))
+            <div class="image-preview">
+                <p style="margin-top: 0; font-size: 0.9em; color: #666; margin-bottom: 5px;">Imagen actual:</p>
+                <img src="{{ asset($product->imagen) }}" alt="Imagen actual">
+            </div>
+        @endif
+    </div>
 </div>
