@@ -34,10 +34,32 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 // Rutas de preferencias
 Route::get('/preferences', [PreferenceController::class, 'index'])->name('preferences');
 Route::post('/preferences/cookie', [CarritoController::class, 'GuardarCookiePreferencia'])->name('preferences.cookie');
-Route::put('/preferences', [PreferenceController::class, 'update'])->name('preferences.update')->middleware('auth');
 
 // Rutas de carrito
 Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
 
+// Agregar producto al carrito
+Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])->name('carrito.agregar');
 
+// Actualizar cantidad de un producto
+Route::put('/carrito/actualizar', [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
 
+// Eliminar un producto del carrito
+Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
+
+// Vaciar el carrito completamente
+Route::delete('/carrito/vaciar', [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
+
+Route::middleware('auth')->group(function () {
+    // Carrito persistente en BD (solo para usuarios autenticados)
+    Route::post('/carrito/guardar-en-bd', [CarritoController::class, 'guardarEnBD'])->name('carrito.guardar');
+
+    // Historial de pedidos guardados por el usuario
+    Route::get('/carrito/historial', [CarritoController::class, 'historial'])->name('carrito.historial');
+
+    // Ver detalles de un pedido guardado
+    Route::get('/carrito/{id}/detalles', [CarritoController::class, 'verDetalles'])->name('carrito.detalles');
+
+    // Actualizar preferencias persistentes en BD (usuario debe estar autenticado)
+    Route::put('/preferences', [PreferenceController::class, 'update'])->name('preferences.update');
+});
