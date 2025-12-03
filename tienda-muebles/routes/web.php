@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PreferenceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ImagenProductoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -30,8 +31,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
+// Rutas de imágenes de productos
+Route::resource('imagen_productos', ImagenProductoController::class);
+
 // Rutas de categorías
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::resource('categories', CategoryController::class);
 
 // Rutas de preferencias
 Route::get('/preferences', [PreferenceController::class, 'index'])->name('preferences');
@@ -39,18 +43,13 @@ Route::put('/preferences', [PreferenceController::class, 'update'])->name('prefe
 
 // Rutas de carrito
 Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito.index');
-Route::post('/carrito/{id}/update', [CarritoController::class, 'updateCantidad'])->name('carrito.update');
-Route::delete('/carrito/{id}', [CarritoController::class, 'removeProducto'])->name('carrito.remove');
 
 // Agregar producto al carrito
 Route::post('/carrito/agregar/{id}', [CarritoController::class, 'agregar'])->name('carrito.agregar');
-
 // Actualizar cantidad de un producto
 Route::put('/carrito/actualizar', [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
-
 // Eliminar un producto del carrito
 Route::delete('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
-
 // Vaciar el carrito completamente
 Route::delete('/carrito/vaciar', [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
 
@@ -64,6 +63,5 @@ Route::middleware('auth')->group(function () {
     // Ver detalles de un pedido guardado
     Route::get('/carrito/{id}/detalles', [CarritoController::class, 'verDetalles'])->name('carrito.detalles');
 
-    // Actualizar preferencias persistentes en BD (usuario debe estar autenticado)
-    Route::put('/preferences', [PreferenceController::class, 'update'])->name('preferences.update');
+
 });

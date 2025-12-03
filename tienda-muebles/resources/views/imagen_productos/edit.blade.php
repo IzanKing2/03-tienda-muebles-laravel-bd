@@ -71,33 +71,64 @@
         color: #555;
     }
 
-    input[type="text"] {
+    select,
+    input[type="file"] {
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
     }
+
+    .current-image {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .current-image img {
+        max-width: 150px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+    }
 </style>
 
 @section('content')
     <div>
-        <h2>Editar Categoría</h2>
+        <h2>Editar Imagen de Galería</h2>
 
-        <form action="{{ route('categories.update', $category) }}" method="POST">
+        <form action="{{ route('imagen_productos.update', $imagen) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
             <div class="form-group">
-                <label for="nombre">Nombre de la Categoría</label>
-                <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $category->nombre) }}" required>
-                @error('nombre')
+                <label for="producto_id">Producto</label>
+                <select name="producto_id" id="producto_id" required>
+                    <option value="">-- Seleccionar Producto --</option>
+                    @foreach($productos as $id => $nombre)
+                        <option value="{{ $id }}" @selected($imagen->galeria->producto_id == $id)>{{ $nombre }}</option>
+                    @endforeach
+                </select>
+                @error('producto_id')
                     <span style="color: red; font-size: 0.9em;">{{ $message }}</span>
                 @enderror
             </div>
 
+            <div class="form-group">
+                <label for="archivo">Imagen (Dejar vacío para mantener actual)</label>
+                <input type="file" name="archivo" id="archivo" accept="image/*">
+                @error('archivo')
+                    <span style="color: red; font-size: 0.9em;">{{ $message }}</span>
+                @enderror
+
+                <div class="current-image">
+                    <p>Imagen Actual:</p>
+                    <img src="{{ asset('storage/' . $imagen->ruta) }}" alt="Imagen actual">
+                </div>
+            </div>
+
             <button type="submit">Actualizar</button>
-            <a href="{{ route('categories.index') }}">Volver</a>
+            <a href="{{ route('imagen_productos.index') }}">Volver</a>
         </form>
     </div>
 @endsection

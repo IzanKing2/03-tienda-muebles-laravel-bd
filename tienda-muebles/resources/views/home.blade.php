@@ -257,7 +257,7 @@
             <div class="grid-productos">
                 @foreach($products as $producto)
                     <div class="tarjeta-producto">
-                        <img src="{{ $producto->imagen }}" alt="{{ $producto->nombre }}">
+                        <img src="{{ $producto->imagen_principal }}" alt="{{ $producto->nombre }}">
                         <div class="info-producto">
                             <h3>{{ $producto->nombre }}</h3>
                             <p>{{ $producto->descripcion }}</p>

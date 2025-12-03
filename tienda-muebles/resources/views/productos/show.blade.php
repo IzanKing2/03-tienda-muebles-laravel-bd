@@ -223,7 +223,7 @@
                 @endif
 
                 @if($product->stock > 0)
-                    <form action="#" method="POST">
+                    <form action=" {{ route('carrito.agregar', $product->id) }} " method="POST">
                         @csrf
                         <button type="submit">Añadir al carrito</button>
                     </form>

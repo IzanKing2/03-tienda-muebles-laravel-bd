@@ -96,15 +96,15 @@ class CartFeatureTest extends TestCase
 
     public function test_cookie_preferences_are_saved()
     {
-        $response = $this->post(route('preferences.cookie'), [
-            'paginacion' => 20,
+        $response = $this->put(route('preferences.update'), [
+            'paginacion' => 24,
             'tema' => 'dark',
-            'moneda' => 'USD',
+            'moneda' => '$',
         ]);
 
         $response->assertRedirect();
-        $response->assertCookie('paginacion', 20);
+        $response->assertCookie('paginacion', 24);
         $response->assertCookie('tema', 'dark');
-        $response->assertCookie('moneda', 'USD');
+        $response->assertCookie('moneda', '$');
     }
 }

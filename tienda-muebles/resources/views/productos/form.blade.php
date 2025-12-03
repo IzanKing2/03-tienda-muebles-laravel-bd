@@ -62,7 +62,7 @@
         display: inline-block;
         background-color: #fff;
     }
-    
+
     .image-preview img {
         max-width: 150px;
         border-radius: 4px;
@@ -73,22 +73,26 @@
 <div class="form-grid">
     <div class="form-group full-width">
         <label for="nombre">Nombre del Producto</label>
-        <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $product->nombre ?? '') }}" required placeholder="Ej: Mesa de Comedor Roble">
+        <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $product->nombre ?? '') }}" required
+            placeholder="Ej: Mesa de Comedor Roble">
     </div>
 
     <div class="form-group full-width">
         <label for="descripcion">Descripción</label>
-        <textarea id="descripcion" name="descripcion" placeholder="Describe los detalles del producto...">{{ old('descripcion', $product->descripcion ?? '') }}</textarea>
+        <textarea id="descripcion" name="descripcion"
+            placeholder="Describe los detalles del producto...">{{ old('descripcion', $product->descripcion ?? '') }}</textarea>
     </div>
 
     <div class="form-group">
         <label for="precio">Precio (€)</label>
-        <input type="number" id="precio" name="precio" step="0.01" value="{{ old('precio', $product->precio ?? '') }}" required placeholder="0.00">
+        <input type="number" id="precio" name="precio" step="0.01" value="{{ old('precio', $product->precio ?? '') }}"
+            required placeholder="0.00">
     </div>
 
     <div class="form-group">
         <label for="stock">Stock Disponible</label>
-        <input type="number" id="stock" name="stock" value="{{ old('stock', $product->stock ?? '') }}" required placeholder="0">
+        <input type="number" id="stock" name="stock" value="{{ old('stock', $product->stock ?? '') }}" required
+            placeholder="0">
     </div>
 
     <div class="form-group full-width">
@@ -96,7 +100,7 @@
         <select id="categoria_id" name="categoria_id">
             <option value="">-- Seleccionar Categoría --</option>
             @foreach ($categorias as $categoria)
-                <option value="{{ $categoria->id }}" @selected(old('categoria_id', $product->categoria_id ?? '') == $categoria->id)>
+                <option value="{{ $categoria->id }}" @selected(old('categoria_id', isset($product) ? ($product->categorias->first()->id ?? '') : '') == $categoria->id)>
                     {{ $categoria->nombre }}
                 </option>
             @endforeach
@@ -106,11 +110,11 @@
     <div class="form-group full-width">
         <label for="imagen">Imagen del Producto</label>
         <input type="file" id="imagen" name="imagen" accept="image/*">
-        
-        @if (!empty($product->imagen))
+
+        @if (!empty($product->imagen_principal))
             <div class="image-preview">
                 <p style="margin-top: 0; font-size: 0.9em; color: #666; margin-bottom: 5px;">Imagen actual:</p>
-                <img src="{{ asset($product->imagen) }}" alt="Imagen actual">
+                <img src="{{ asset($product->imagen_principal) }}" alt="Imagen actual">
             </div>
         @endif
     </div>

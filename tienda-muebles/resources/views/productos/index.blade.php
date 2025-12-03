@@ -159,12 +159,12 @@
                     <tr>
                         <td>{{ $p->id }}</td>
                         <td>{{ $p->nombre }}</td>
-                        <td>{{ $p->categoria_id }}</td>
-                        <td>{{ $p->precioFormateado }}</td>
+                        <td>{{ $p->categorias->pluck('nombre')->implode(', ') }}</td>
+                        <td>$ {{ number_format($p->precio, 2) }}</td>
                         <td>{{ $p->stock }}</td>
                         <td>
-                            @if ($p->imagen)
-                                <img src="{{ asset($p->imagen) }}">
+                            @if ($p->imagen_principal)
+                                <img src="{{ asset($p->imagen_principal) }}">
                             @endif
                         </td>
                         <td>
