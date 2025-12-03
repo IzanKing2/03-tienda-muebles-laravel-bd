@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
@@ -49,6 +51,17 @@ class Producto extends Model
     public function galeria()
     {
         return $this->hasOne(Galeria::class, 'producto_id');
+    }
+
+    /**
+     * Relación: un producto puede estar en muchos carritos a través de los items
+     */
+
+    public function carritos()
+    {
+        return $this->belongsToMany(Carrito::class, 'carrito_items', 'producto_id', 'carrito_id')
+                    ->withPivot('cantidad', 'precio_unitario')
+                    ->withTimestamps();
     }
 
     /**
@@ -113,6 +126,15 @@ class Producto extends Model
     public function tieneStock($cantidad = 1)
     {
         return $this->stock >= $cantidad;
+    }
+
+    /**
+     * Método helper: obtener stock actual
+     */
+
+    public function obtenerStock()
+    {
+        return $this->stock;
     }
 
     /**
