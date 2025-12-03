@@ -186,40 +186,44 @@
         <nav>
             <ol>
                 <li><a href="{{ route('productos.index') }}">Muebles</a></li>
-                <li>{{ $producto->nombre }}</li>
+                <li>{{ $product->nombre }}</li>
             </ol>
         </nav>
 
         <div class="contenido-principal">
             <div class="seccion-imagenes">
                 <div class="imagen-principal">
-                    <img src="{{ asset('storage/' . $producto->imagen) }}" alt="{{ $producto->nombre }}">
+                    @if($product->imagen_principal)
+                        <img src="{{ asset('storage/' . $product->imagen_principal) }}" alt="{{ $product->nombre }}">
+                    @else
+                        <img src="https://via.placeholder.com/600x400?text=No+Image" alt="Sin imagen">
+                    @endif
                 </div>
 
-                @if(isset($producto->galeria) && count($producto->galeria))
+                @if($product->galeria && $product->galeria->imagenes->count())
                     <div class="galeria-miniatura">
-                        @foreach($producto->galeria as $img)
-                            <img src="{{ asset('storage/' . $img) }}" width="80" alt="Galería de {{ $producto->nombre }}">
+                        @foreach($product->galeria->imagenes as $img)
+                            <img src="{{ asset('storage/' . $img->ruta) }}" width="80" alt="Galería de {{ $product->nombre }}">
                         @endforeach
                     </div>
                 @endif
             </div>
 
             <div class="seccion-info">
-                <h1>{{ $producto->nombre }}</h1>
+                <h1>{{ $product->nombre }}</h1>
 
-                <p class="categoria">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</p>
-                <h3>${{ number_format($producto->precio, 2) }}</h3>
-                <p class="descripcion">{{ $producto->descripcion }}</p>
+                <p class="categoria">{{ $product->categorias->first()->nombre ?? 'Sin categoría' }}</p>
+                <h3>${{ number_format($product->precio, 2) }}</h3>
+                <p class="descripcion">{{ $product->descripcion }}</p>
 
-                @if($producto->stock > 0)
-                    <p class="stock-info">En stock: {{ $producto->stock }}</p>
+                @if($product->stock > 0)
+                    <p class="stock-info">En stock: {{ $product->stock }}</p>
                 @else
                     <p class="sin-stock">Sin stock</p>
                 @endif
 
-                @if($producto->stock > 0)
-                    <form action="{{ route('carrito.agregar', $producto->id) }}" method="POST">
+                @if($product->stock > 0)
+                    <form action="#" method="POST">
                         @csrf
                         <button type="submit">Añadir al carrito</button>
                     </form>
@@ -229,10 +233,10 @@
 
         <hr>
 
-        @if(isset($producto->especificaciones))
+        @if($product->especificaciones)
             <h3>Especificaciones</h3>
             <ul class="lista-especificaciones">
-                @foreach($producto->especificaciones as $key => $value)
+                @foreach($product->especificaciones as $key => $value)
                     <li>
                         <strong>{{ ucfirst($key) }}</strong>
                         <span>{{ $value }}</span>

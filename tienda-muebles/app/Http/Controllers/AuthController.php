@@ -46,7 +46,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Hasta luego');
+        return redirect()->route('home')->with('success', 'Hasta luego');
     }
 
     /**

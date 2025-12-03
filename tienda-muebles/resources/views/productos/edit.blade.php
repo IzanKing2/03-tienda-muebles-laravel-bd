@@ -3,9 +3,11 @@
     * {
         font-family: Arial, sans-serif;
     }
+
     body {
         background-color: #976f47;
     }
+
     div {
         max-width: 600px;
         margin: 50px auto;
@@ -62,7 +64,7 @@
         background-color: #7e4c1a;
     }
 
-    form > .button-group {
+    form>.button-group {
         display: flex;
         gap: 15px;
         justify-content: flex-end;
@@ -71,17 +73,17 @@
 </style>
 
 @section('content')
-<div>
-    <h2>Editar Producto</h2>
+    <div>
+        <h2>Editar Producto</h2>
 
-    <form action="{{ route('products.update', $producto) }}" method="POST" enctype="multipart/form-data">
-        <div class="button-group">
-            @csrf
-            @method('PUT')
-            @include('products.form', ['producto' => $producto])
-            <button type="submit">Actualizar</button>
-            <a href="{{ route('productos.index') }}">Volver</a>
-        </div> 
-    </form>
-</div>
+        <form action="{{ route('products.update', $product) }}" method="PUT" enctype="multipart/form-data">
+            <div class="button-group">
+                @csrf
+                @method('PUT')
+                @include('productos.form', ['product' => $product])
+                <button type="submit">Actualizar</button>
+                <a href="{{ route('products.index') }}">Volver</a>
+            </div>
+        </form>
+    </div>
 @endsection

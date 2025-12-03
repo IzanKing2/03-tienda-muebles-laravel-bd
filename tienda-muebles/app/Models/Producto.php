@@ -80,7 +80,7 @@ class Producto extends Model
      */
     public function scopePorCategoria($query, $categoriaId)
     {
-        return $query->whereHas('categorias', function($q) use ($categoriaId) {
+        return $query->whereHas('categorias', function ($q) use ($categoriaId) {
             $q->where('categorias.id', $categoriaId);
         });
     }
@@ -126,5 +126,16 @@ class Producto extends Model
             return true;
         }
         return false;
+    }
+    /**
+     * Accessor: obtener especificaciones como array
+     */
+    public function getEspecificacionesAttribute()
+    {
+        return [
+            'materiales' => $this->materiales,
+            'dimensiones' => $this->dimensiones,
+            'color' => $this->color_principal,
+        ];
     }
 }
